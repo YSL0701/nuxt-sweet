@@ -1,5 +1,5 @@
 {
-  "name": "sweetaste",
+  "name": "Sweetaste",
   "version": "1.0.0",
   "description": "sweetaste",
   "author": "YSL0701",
@@ -13,9 +13,17 @@
   },
   "dependencies": {
     "cross-env": "^5.2.0",
-    "nuxt": "^2.0.0"
+    "nuxt": "^2.0.0",
+    "nuxt-sass-resources-loader": "^2.0.5"
   },
   "devDependencies": {
-    "nodemon": "^1.11.0"
-  }
+    "node-sass": "^4.9.4",
+    "nodemon": "^1.11.0",
+    "sass-loader": "^7.1.0",
+    "style-resources-loader": "^1.2.1"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions"
+  ]
 }
