@@ -47,7 +47,7 @@ import indexMmenu from '~/components/indexMenu.vue'
 import productCard from '~/components/productCard.vue'
 export default {
   asyncData() {
-    return axios.get('http://localhost:3000/product.json').then(res => {
+    return axios.get(`${process.env.BASE_URL}/product.json`).then(res => {
       return { productUrl: res.data }
     })
   },

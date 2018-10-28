@@ -58,5 +58,8 @@ module.exports = {
     },
     extractCSS: { allChunks: true },
     extend(config, ctx) {}
+  },
+  env: {
+    BASE_URL: process.env.NODE_ENV === 'production' ? 'https://sweetaste.herokuapp.com/' : 'http://localhost:3000'
   }
 }
