@@ -6,13 +6,21 @@
         <div class="menu-line"></div>
         <div class="menu-line"></div>
       </div>
-      <img src="~static/image/logo-all-dark.svg" alt="" class="desktop-logo">
-      <img src="~static/image/logotype-sm-dark.svg" alt="" class="mobile-logo">
+      <img src="~/static/image/logo-all-dark.svg" alt="" class="desktop-logo">
+      <img src="~/static/image/logotype-sm-dark.svg" alt="" class="mobile-logo">
       <ul>
-        <li><a href="./index.html">首頁</a></li>
-        <li><a href="./product.html">甜點</a></li>
-        <li><a href="./login.html">登入</a></li>
-        <li class="cart"><a href="./cart.html"><i class="material-icons">shopping_cart</i></a></li>
+        <li>
+          <nuxt-link to="/" class="nuxtLink">首頁</nuxt-link>
+        </li>
+        <li>
+          <nuxt-link to="/product" class="nuxtLink">甜點</nuxt-link>
+        </li>
+        <li>
+          <nuxt-link to="/login" class="nuxtLink">登入</nuxt-link>
+        </li>
+        <li class="cart">
+          <nuxt-link to="/cart" class="nuxtLink"><i class="material-icons">shopping_cart</i></nuxt-link>
+        </li>
       </ul>
     </div>
   </header>
@@ -70,29 +78,42 @@ header {
     > ul {
       list-style: none;
       padding: 0;
+      margin: 0;
       @include flex(row, space-between, center);
       > li {
-        display: inline-block;
-        margin-left: 60px;
+        display: block;
         @include media($mobile) {
           display: none;
         }
-        > a {
+        > .nuxtLink {
           text-decoration: none;
+          width: 92px;
+          height: 100px;
           font-size: 16px;
           font-weight: bold;
           color: $primary;
-          &:hover {
-            color: lighten($primary, 10%);
+          @include flex(row, center, center);
+          @include media($desktop) {
+            transition-property: background-color, color;
+            transition-duration: 0.3s;
+            &:hover {
+              background-color: $primary;
+              color: #ffffff;
+            }
           }
         }
       }
       > .cart {
-        margin-left: 79px;
         @include media($mobile) {
-          display: inline-block;
           margin-left: 0;
-          margin-right: 30px;
+          @include flex(row, center, center);
+        }
+        > .nuxtLink {
+          width: 73px;
+          @include media($mobile) {
+            width: 84px;
+            height: 84px;
+          }
         }
       }
     }

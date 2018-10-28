@@ -4,7 +4,7 @@
     <div class="subscribe">
       <div class="subscribe-container">
         <div class="subscribe-text">
-          <img src="~static/image/logo-light.svg" alt="" class="logo">
+          <img src="~/static/image/logo-light.svg" alt="" class="logo">
           <div class="text">訂閱你我的甜蜜郵件</div>
         </div>
         <div class="input-item">
@@ -20,8 +20,8 @@
     <div class="sweet-info">
       <div class="info-container">
         <div class="sweetaste-image">
-          <img src="~static/image/logotype-lg-dark.svg" alt="" class="sweetaste">
-          <img src="~static/image/sm-今天是個吃甜點的好日子.svg" alt="" class="good-day">
+          <img src="~/static/image/logotype-lg-dark.svg" alt="" class="sweetaste">
+          <img src="~/static/image/sm-今天是個吃甜點的好日子.svg" alt="" class="good-day">
         </div>
         <div class="info">
           <div class="tel">07-1234-5678</div>
@@ -31,10 +31,10 @@
         <div class="footer-bottom">
           <div class="icon">
             <a href="javascript:" class="icon-line">
-              <img src="~static/image/ic-line@.svg" alt="">
+              <img src="~/static/image/ic-line@.svg" alt="">
             </a>
             <a href="javascript:" class="icon-facebook">
-              <img src="~static/image/ic-facebook.svg" alt="">
+              <img src="~/static/image/ic-facebook.svg" alt="">
             </a>
           </div>
           <div class="copyright">© 2018 Sweetaste* All Rights Reserved</div>
@@ -123,9 +123,6 @@ footer {
             color: $primary;
             background-color: #ffe180;
             @include flex(row, center, center);
-            &:active {
-              outline: 2px solid darken(#ffe180, 20%);
-            }
           }
         }
       }

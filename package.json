@@ -1,5 +1,5 @@
 {
-  "name": "Sweetaste",
+  "name": "Sweetaste*",
   "version": "1.0.0",
   "description": "sweetaste",
   "author": "YSL0701",
@@ -12,9 +12,9 @@
     "heroku-postbuild": "npm run build"
   },
   "dependencies": {
+    "axios": "^0.18.0",
     "cross-env": "^5.2.0",
-    "nuxt": "^2.0.0",
-    "nuxt-sass-resources-loader": "^2.0.5"
+    "nuxt": "^2.0.0"
   },
   "devDependencies": {
     "node-sass": "^4.9.4",

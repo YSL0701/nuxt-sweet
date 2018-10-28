@@ -1,0 +1,92 @@
+<template>
+  <div class="product-card">
+    <div class="product-image" :style="{backgroundImage: `url(${url})`}">
+      <div class="product-tag">
+        <div class="tag-text">本日精選</div>
+      </div>
+      <div class="heart">
+        <i class="far fa-heart"></i>
+      </div>
+    </div>
+    <div class="product-info">
+      <div class="product-name">焦糖馬卡龍</div>
+      <div class="price">NT$ 450</div>
+    </div>
+    <div class="add-to-cart">加入購物車</div>
+  </div>
+</template>
+
+<script>
+export default {
+  props: ['url']
+}
+</script>
+
+<style lang="scss" scoped>
+.product-card {
+  .product-image {
+    width: $card-image-width;
+    height: $card-image-height;
+    background-size: cover;
+    background-position: center center;
+    @include flex(row, space-between);
+    .product-tag {
+      width: $tag-width;
+      height: $tag-height;
+      margin-left: 20px;
+      background-color: $primary;
+      @include flex(row, center, center);
+      .tag-text {
+        width: 16px;
+        font-size: 16px;
+        color: #ffffff;
+        line-height: 20px;
+      }
+    }
+    .heart {
+      margin-top: 20px;
+      margin-right: 20px;
+      font-size: 20px;
+      color: $primary;
+    }
+  }
+  .product-info {
+    height: 54px;
+    color: $primary;
+    font-size: 20px;
+    @include flex(row, space-between, center);
+    .product-name {
+      width: 173px;
+      height: 54px;
+      @include flex(row, flex-start, center);
+      padding-left: 32px;
+      border-left: 1px solid $secondary;
+      border-right: 1px solid $secondary;
+    }
+    .price {
+      width: 127px;
+      height: 54px;
+      font-weight: bold;
+      @include flex(row, flex-end, center);
+      padding-right: 19px;
+      border-right: 1px solid $secondary;
+    }
+  }
+  .add-to-cart {
+    width: $card-image-width;
+    height: 65px;
+    font-size: 24px;
+    font-weight: bold;
+    color: $primary;
+    background-color: $secondary;
+    cursor: pointer;
+    @include flex(row, center, center);
+    transition-property: color, background-color;
+    transition-duration: 0.3s;
+    &:hover {
+      color: $secondary;
+      background-color: $primary;
+    }
+  }
+}
+</style>
