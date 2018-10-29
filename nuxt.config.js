@@ -15,7 +15,7 @@ module.exports = {
       { 'http-equiv': 'X-UA-Compatible', content: 'ie=edge' }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '~/static/favicon.ico' },
+      { rel: 'icon', type: 'image/x-icon', href: './favicon.ico' },
       { rel: 'stylesheet', href: 'https://fonts.googleapis.com/icon?family=Material+Icons' },
       {
         rel: 'stylesheet',

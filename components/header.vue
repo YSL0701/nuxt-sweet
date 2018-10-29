@@ -73,6 +73,7 @@ header {
         display: block;
         width: 115px;
         height: 18px;
+        margin-left: 30px;
       }
     }
     > ul {

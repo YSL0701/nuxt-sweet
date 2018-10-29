@@ -70,13 +70,12 @@ export default {
     height: $main-image-height;
     margin-left: auto;
     margin-right: auto;
-  }
-  > .product-preview {
-    height: 434px;
-    @include flex(row, space-between);
-    padding-left: $page-gap;
-    padding-right: $page-gap;
-    margin-top: 80px;
+    @include media($tablet) {
+      width: 100%;
+    }
+    @include media($mobile) {
+      height: 277px;
+    }
   }
   > .why-make {
     height: 420px;
@@ -85,8 +84,30 @@ export default {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    @include media($tablet) {
+      justify-content: space-around;
+    }
+    @include media($mobile) {
+      height: auto;
+      margin-top: 30px;
+      flex-direction: column;
+      background-color: transparent;
+    }
+    .desktop-why-make {
+      width: 89px;
+      height: 308px;
+      @include media($mobile) {
+        display: none;
+      }
+    }
     .mobile-why-make {
       display: none;
+      @include media($mobile) {
+        display: block;
+        align-self: center;
+        width: 190px;
+        height: 59px;
+      }
     }
     .reason-img {
       width: $reason-img-wh;
@@ -96,19 +117,37 @@ export default {
       background-position: center center;
       align-self: center;
       margin-left: $page-gap;
+      @include media($tablet) {
+        width: 40%;
+        height: auto;
+        padding-bottom: 40%;
+      }
+      @include media($mobile) {
+        width: 100%;
+        height: 250px;
+        margin-left: 0;
+        margin-top: 30px;
+        padding-bottom: 0;
+      }
     }
     .reason {
       writing-mode: vertical-rl;
       color: $primary;
       margin-right: $page-gap;
+      @include media($mobile) {
+        writing-mode: horizontal-tb;
+        margin-right: 0;
+      }
     }
     .title {
       margin-left: 80px;
       margin-top: -20px;
-    }
-    .desktop-why-make {
-      width: 89px;
-      height: 308px;
+      @include media($tablet) {
+        margin-left: 40px;
+      }
+      @include media($mobile) {
+        display: none;
+      }
     }
     .article {
       width: 256px;
@@ -117,6 +156,20 @@ export default {
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      @include media($tablet) {
+        width: 60%;
+      }
+      @include media($mobile) {
+        width: 100%;
+        height: auto;
+        margin-top: 0;
+        padding-top: 30px;
+        padding-bottom: 30px;
+        background-color: $secondary;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
     }
     p {
       font-size: 16px;
@@ -124,6 +177,23 @@ export default {
       line-height: 40px;
       margin-right: $p-line-height-remove;
       margin-left: $p-line-height-remove;
+      @include media($tablet) {
+        line-height: 35px;
+        margin-right: 0;
+        margin-left: 0;
+      }
+      @include media($mobile) {
+        line-height: 32px;
+        margin-top: -8px;
+        margin-bottom: -8px;
+        margin-right: 30px;
+        margin-left: 30px;
+      }
+    }
+    .p2 {
+      @include media($mobile) {
+        margin-top: 28px;
+      }
     }
   }
   > .why-eat {
@@ -133,8 +203,31 @@ export default {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    @include media($tablet) {
+      justify-content: space-around;
+    }
+    @include media($mobile) {
+      height: auto;
+      margin-top: 30px;
+      flex-direction: column;
+      background-color: transparent;
+    }
+    .desktop-why-eat {
+      width: 89px;
+      height: 304px;
+      @include media($mobile) {
+        display: none;
+      }
+    }
     .mobile-why-eat {
       display: none;
+      @include media($mobile) {
+        display: block;
+        width: 190px;
+        height: 59px;
+        align-self: center;
+        order: -2;
+      }
     }
     .reason-img {
       width: $reason-img-wh;
@@ -144,19 +237,42 @@ export default {
       background-position: center center;
       align-self: center;
       margin-right: $page-gap;
+      @include media($tablet) {
+        width: 40%;
+        height: auto;
+        padding-bottom: 40%;
+      }
+      @include media($mobile) {
+        width: 100%;
+        height: 250px;
+        margin-right: 0;
+        margin-top: 30px;
+        order: -1;
+        padding-bottom: 0;
+      }
     }
     .reason {
       writing-mode: vertical-rl;
       color: $primary;
       margin-left: 55.5px;
+      @include media($tablet) {
+        margin-right: 20px;
+      }
+      @include media($mobile) {
+        writing-mode: horizontal-tb;
+        margin-left: 0;
+        margin-right: 0;
+      }
     }
     .title {
       margin-left: 80px;
       margin-top: -20px;
-    }
-    .desktop-why-eat {
-      width: 89px;
-      height: 304px;
+      @include media($tablet) {
+        margin-left: 40px;
+      }
+      @include media($mobile) {
+        display: none;
+      }
     }
     .article {
       width: 256px;
@@ -165,6 +281,20 @@ export default {
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      @include media($tablet) {
+        width: 60%;
+      }
+      @include media($mobile) {
+        width: 100%;
+        height: auto;
+        margin-top: 0;
+        padding-top: 30px;
+        padding-bottom: 30px;
+        background-color: $secondary;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
     }
     p {
       font-size: 16px;
@@ -172,18 +302,68 @@ export default {
       line-height: 40px;
       margin-right: $p-line-height-remove;
       margin-left: $p-line-height-remove;
+      @include media($tablet) {
+        line-height: 35px;
+        margin-right: 0;
+        margin-left: 0;
+      }
+      @include media($mobile) {
+        line-height: 32px;
+        margin-top: -8px;
+        margin-bottom: -8px;
+        margin-right: 30px;
+        margin-left: 30px;
+      }
+    }
+    .p2 {
+      @include media($mobile) {
+        margin-top: 28px;
+      }
     }
   }
   > .no-reason {
     margin-top: 95px;
     margin-left: 483px;
     height: 328px;
+    @include media($tablet) {
+      margin-left: 0;
+      display: flex;
+      justify-content: center;
+    }
+    @include media($mobile) {
+      margin-top: 30px;
+      height: auto;
+    }
     .desktop-no-reason {
       width: 90px;
       height: 328px;
+      @include media($mobile) {
+        display: none;
+      }
     }
     .mobile-no-reason {
       display: none;
+      @include media($mobile) {
+        display: block;
+        width: 209px;
+        height: 59px;
+      }
+    }
+  }
+  > .product-preview {
+    @include flex(row, space-between);
+    flex-wrap: wrap;
+    padding-left: $page-gap;
+    padding-right: $page-gap;
+    margin-top: 80px;
+    @include media($tablet) {
+      margin-top: 60px;
+    }
+    @include media($mobile) {
+      margin-top: 10px;
+      justify-content: center;
+      padding-left: 0;
+      padding-right: 0;
     }
   }
 }

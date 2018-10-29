@@ -10,9 +10,7 @@
         <div class="input-item">
           <div class="icon-mail"><i class="material-icons">mail</i></div>
           <input type="text">
-          <a href="javascript:">
-            <div class="submit"><i class="material-icons">arrow_forward</i></div>
-          </a>
+          <div class="submit"><i class="material-icons">arrow_forward</i></div>
         </div>
       </div>
     </div>
@@ -96,7 +94,7 @@ footer {
           width: calc(100% - 60px);
           max-width: 360px;
         }
-        > div {
+        > .icon-mail {
           width: 64px;
           height: $input-height;
           color: $primary;
@@ -115,15 +113,12 @@ footer {
             width: calc(100% - 128px);
           }
         }
-        > a {
-          text-decoration: none;
-          > div {
-            width: 64px;
-            height: $input-height;
-            color: $primary;
-            background-color: #ffe180;
-            @include flex(row, center, center);
-          }
+        > .submit {
+          width: 64px;
+          height: $input-height;
+          color: $primary;
+          background-color: #ffe180;
+          @include flex(row, center, center);
         }
       }
     }

@@ -37,6 +37,7 @@ export default {
   margin-top: $product-menu-mt;
   @include media($mobile) {
     justify-content: space-between;
+    margin-top: 0;
   }
   > .edge {
     overflow: hidden;
@@ -54,6 +55,10 @@ export default {
         filter: blur(0);
       }
     }
+    @include media($mobile) {
+      margin-left: 0;
+      width: 33%;
+    }
     .today-featured,
     .most-popular,
     .new-product {
@@ -65,10 +70,17 @@ export default {
       transform: scale(1.1);
       transition-property: transform, filter;
       transition-duration: 0.5s;
+      @include media($mobile) {
+        width: 100%;
+        height: 180px;
+      }
       .transparent {
         height: 256px;
         background-color: $primary;
         opacity: 0.8;
+        @include media($mobile) {
+          height: 180px;
+        }
       }
     }
     .today-featured {
@@ -90,6 +102,14 @@ export default {
       font-size: 24px;
       font-weight: bold;
       color: #ffffff;
+      @include media($mobile) {
+        width: 20px;
+        bottom: 40px;
+        left: 50%;
+        margin-left: -10px;
+        line-height: 24px;
+        font-size: 20px;
+      }
     }
   }
   .correct {
