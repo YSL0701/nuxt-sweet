@@ -16,7 +16,8 @@
           <nuxt-link to="/product" class="nuxtLink">甜點</nuxt-link>
         </li>
         <li>
-          <nuxt-link to="/login" class="nuxtLink">登入</nuxt-link>
+          <nuxt-link to="/login" class="nuxtLink" v-if="!user">登入</nuxt-link>
+          <div class="nuxtLink logout" v-if="user" @click="logout">登出</div>
         </li>
         <li class="cart">
           <nuxt-link to="/cart" class="nuxtLink"><i class="material-icons">shopping_cart</i></nuxt-link>
@@ -25,6 +26,24 @@
     </div>
   </header>
 </template>
+
+<script>
+export default {
+  methods: {
+    logout() {
+      this.$store.dispatch('logout')
+    }
+  },
+  computed: {
+    user() {
+      return this.$store.state.auth.user
+    }
+  },
+  beforeCreate() {
+    this.$store.dispatch('checkUser')
+  }
+}
+</script>
 
 <style lang="scss" scoped>
 header {
@@ -102,6 +121,9 @@ header {
               color: #ffffff;
             }
           }
+        }
+        > .logout {
+          cursor: pointer;
         }
       }
       > .cart {
