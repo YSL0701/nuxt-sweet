@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <div class="login-area">
-      <div class="title">會員登入</div>
+      <div class="title">註冊帳號</div>
       <div class="mobile-other-account">
         <a href="javascript:">
           <div><img src="~/static/image/ic-facebook-logotype.svg" alt="" class="facebook"></div>
@@ -26,21 +26,17 @@
           <input type="checkbox" id="remember" class="checkbox">
           <span class="ischeck"><i class="material-icons">check_box</i></span>
           <span class="uncheck"><i class="material-icons">check_box_outline_blank</i></span>
-          記住我
+          訂閱最新消息
         </label>
-        <nuxt-link to="/registered" class="registered">
-          <div class="triangle"></div>
-          <span>註冊新帳號</span>
-        </nuxt-link>
       </div>
       <a href="javascript:">
-        <div class="login" @click="emailLogin">登入帳號</div>
+        <div class="login" @click="emailLogin">建立新帳號</div>
       </a>
     </div>
     <div class="other-account">
       <div class="title">—— 連結社群帳號 ——</div>
       <div class="other-account-icon">
-        <div class="facebook" @click="fbLogin"><img src="~/static/image/ic-facebook-logotype.svg" alt=""></div>
+        <div class="facebook"><img src="~/static/image/ic-facebook-logotype.svg" alt=""></div>
         <div class="google" @click="googleLogin"><img src="~/static/image/ic-google.svg" alt=""></div>
         <div class="yahoo" @click="test"><img src="~/static/image/ic-yahoo.svg" alt=""></div>
       </div>
@@ -65,15 +61,12 @@ export default {
     },
     test() {
       this.$store.dispatch('test')
-    },
-    fbLogin() {
-      this.$store.dispatch('fbLogin')
     }
   },
   computed: {},
   head() {
     return {
-      title: '登入'
+      title: '註冊帳號'
     }
   }
 }
@@ -96,11 +89,11 @@ export default {
   > .login-area {
     background-color: $primary;
     width: 390px;
-    height: 406px;
+    height: 380px;
     @include flex(column, flex-start, center);
     @include media($mobile) {
       width: 100%;
-      height: 537px;
+      height: 511px;
     }
     > .title {
       height: 50px;

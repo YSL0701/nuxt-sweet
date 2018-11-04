@@ -16,8 +16,9 @@
           <nuxt-link to="/product" class="nuxtLink">甜點</nuxt-link>
         </li>
         <li>
-          <nuxt-link to="/login" class="nuxtLink" v-if="!user">登入</nuxt-link>
-          <div class="nuxtLink logout" v-if="user" @click="logout">登出</div>
+          <nuxt-link to="/login" class="nuxtLink" v-if="!user && reflashEnd">登入</nuxt-link>
+          <div class="nuxtLink logout" v-else-if="user && reflashEnd" @click="logout">登出</div>
+          <div class="nuxtLink" v-else></div>
         </li>
         <li class="cart">
           <nuxt-link to="/cart" class="nuxtLink"><i class="material-icons">shopping_cart</i></nuxt-link>
@@ -29,6 +30,11 @@
 
 <script>
 export default {
+  data() {
+    return {
+      reflashEnd: false
+    }
+  },
   methods: {
     logout() {
       this.$store.dispatch('logout')
@@ -39,8 +45,10 @@ export default {
       return this.$store.state.auth.user
     }
   },
-  beforeCreate() {
-    this.$store.dispatch('checkUser')
+  created() {
+    this.$store.dispatch('checkUser').then(res => {
+      this.reflashEnd = true
+    })
   }
 }
 </script>

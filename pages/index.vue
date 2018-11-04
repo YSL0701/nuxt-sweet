@@ -358,10 +358,10 @@ export default {
     margin-top: 80px;
     @include media($tablet) {
       margin-top: 60px;
+      justify-content: center;
     }
     @include media($mobile) {
       margin-top: 10px;
-      justify-content: center;
       padding-left: 0;
       padding-right: 0;
     }

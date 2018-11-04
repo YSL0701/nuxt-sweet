@@ -22,9 +22,6 @@ export default {
       var provider = new firebase.auth.GoogleAuthProvider()
       provider.addScope('https://www.googleapis.com/auth/contacts.readonly')
       firebase.auth().useDeviceLanguage()
-      provider.setCustomParameters({
-        login_hint: 'user@example.com'
-      })
       auth
         .signInWithPopup(provider)
         .then(function(result) {
@@ -50,9 +47,29 @@ export default {
       firebase.auth().useDeviceLanguage()
       firebase.auth().signInWithRedirect(provider)
     },
+    fbLogin({ commit }) {
+      var provider = new firebase.auth.FacebookAuthProvider()
+      auth.useDeviceLanguage()
+      auth
+        .signInWithPopup(provider)
+        .then(function(result) {
+          var token = result.credential.accessToken
+          var user = result.user
+          commit('setUser', user)
+        })
+        .catch(function(error) {
+          var errorCode = error.code
+          var errorMessage = error.message
+          var email = error.email
+          var credential = error.credential
+        })
+    },
     checkUser({ commit }) {
-      auth.onAuthStateChanged(user => {
-        commit('setUser', user)
+      return new Promise((resolve, reject) => {
+        auth.onAuthStateChanged(user => {
+          commit('setUser', user)
+          resolve(true)
+        })
       })
     }
   }

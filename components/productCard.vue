@@ -24,8 +24,10 @@ export default {
 
 <style lang="scss" scoped>
 .product-card {
+  margin-top: 20px;
+  @include flex(column, center, center);
   @include media($tablet) {
-    margin-top: 20px;
+    width: 320px;
   }
   .product-image {
     width: $card-image-width;
@@ -33,9 +35,9 @@ export default {
     background-size: cover;
     background-position: center center;
     @include flex(row, space-between);
-    @include media($mobile) {
-      width: 315px;
-    }
+    // @include media($mobile) {
+    //   width: 315px;
+    // }
     .product-tag {
       width: $tag-width;
       height: $tag-height;
@@ -68,10 +70,10 @@ export default {
       padding-left: 32px;
       border-left: 1px solid $secondary;
       border-right: 1px solid $secondary;
-      @include media($mobile) {
-        width: 183px;
-        padding-left: 37px;
-      }
+      // @include media($mobile) {
+      //   width: 183px;
+      //   padding-left: 37px;
+      // }
     }
     .price {
       width: 127px;
@@ -80,10 +82,10 @@ export default {
       @include flex(row, flex-end, center);
       padding-right: 19px;
       border-right: 1px solid $secondary;
-      @include media($mobile) {
-        width: 132px;
-        padding-right: 24.4px;
-      }
+      // @include media($mobile) {
+      //   width: 132px;
+      //   padding-right: 24.4px;
+      // }
     }
   }
   .add-to-cart {
@@ -103,9 +105,9 @@ export default {
         background-color: $primary;
       }
     }
-    @include media($mobile) {
-      width: 315px;
-    }
+    // @include media($mobile) {
+    //   width: 315px;
+    // }
   }
 }
 </style>
