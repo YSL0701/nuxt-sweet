@@ -4,7 +4,7 @@
       <div class="title">會員登入</div>
       <div class="mobile-other-account">
         <a href="javascript:">
-          <div><img src="~/static/image/ic-facebook-logotype.svg" alt="" class="facebook"></div>
+          <div @click="fbLogin_redirect"><img src="~/static/image/ic-facebook-logotype.svg" alt="" class="facebook"></div>
         </a>
         <a href="javascript:">
           <div class="google-area"><img src="~/static/image/ic-google.svg" alt="" class="google"></div>
@@ -68,6 +68,9 @@ export default {
     },
     fbLogin() {
       this.$store.dispatch('fbLogin')
+    },
+    fbLogin_redirect() {
+      this.$store.dispatch('fbLogin_redirect')
     }
   },
   computed: {},

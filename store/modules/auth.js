@@ -64,6 +64,32 @@ export default {
           var credential = error.credential
         })
     },
+    fbLogin_redirect({ commit }) {
+      var provider = new firebase.auth.FacebookAuthProvider()
+      auth.useDeviceLanguage()
+      auth
+        .getRedirectResult()
+        .then(function(result) {
+          if (result.credential) {
+            // This gives you a Facebook Access Token. You can use it to access the Facebook API.
+            var token = result.credential.accessToken
+            // ...
+          }
+          // The signed-in user info.
+          var user = result.user
+          commit('setUser', user)
+        })
+        .catch(function(error) {
+          // Handle Errors here.
+          var errorCode = error.code
+          var errorMessage = error.message
+          // The email of the user's account used.
+          var email = error.email
+          // The firebase.auth.AuthCredential type that was used.
+          var credential = error.credential
+          // ...
+        })
+    },
     checkUser({ commit }) {
       return new Promise((resolve, reject) => {
         auth.onAuthStateChanged(user => {
