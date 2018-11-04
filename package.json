@@ -2,6 +2,9 @@
   "name": "Sweetaste*",
   "version": "1.0.0",
   "description": "sweetaste",
+  "engines": {
+    "node": "10.5.0"
+  },
   "author": "YSL0701",
   "private": true,
   "scripts": {
