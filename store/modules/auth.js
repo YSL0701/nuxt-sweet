@@ -22,19 +22,22 @@ export default {
       var provider = new firebase.auth.GoogleAuthProvider()
       provider.addScope('https://www.googleapis.com/auth/contacts.readonly')
       firebase.auth().useDeviceLanguage()
-      auth
-        .signInWithPopup(provider)
-        .then(function(result) {
-          var token = result.credential.accessToken
-          var user = result.user
-          commit('setUser', user)
-        })
-        .catch(function(error) {
-          var errorCode = error.code
-          var errorMessage = error.message
-          var email = error.email
-          var credential = error.credential
-        })
+      return new Promise((resolve, reject) => {
+        auth
+          .signInWithPopup(provider)
+          .then(function(result) {
+            var token = result.credential.accessToken
+            var user = result.user
+            resolve(user)
+            commit('setUser', user)
+          })
+          .catch(function(error) {
+            var errorCode = error.code
+            var errorMessage = error.message
+            var email = error.email
+            var credential = error.credential
+          })
+      })
     },
     logout({ commit }) {
       auth.signOut().then(user => {

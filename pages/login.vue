@@ -5,7 +5,7 @@
       <div class="mobile-other-account">
         <div @click="fbLogin_redirect"><img src="~/static/image/ic-facebook-logotype.svg" alt="" class="facebook"></div>
         <div @click="googleLogin_redirect" class="google-area"><img src="~/static/image/ic-google.svg" alt="" class="google"></div>
-        <div @click="twitterLogin_redirect">Twitter</div>
+        <div @click="twitterLogin_redirect" class="twitter">Twitter</div>
       </div>
       <div class="login-info">
         <div class="account">
@@ -58,7 +58,11 @@ export default {
       this.$store.dispatch('emailLogin', { email: this.email, password: this.password })
     },
     googleLogin() {
-      this.$store.dispatch('googleLogin')
+      this.$store.dispatch('googleLogin').then(user => {
+        this.setCookie(user)
+        console.log(user)
+        console.log(this.$cookies.get('cookie-name'))
+      })
     },
     googleLogin_redirect() {
       this.$store.dispatch('googleLogin_redirect')
@@ -74,16 +78,29 @@ export default {
     },
     twitterLogin_redirect() {
       this.$store.dispatch('twitterLogin_redirect')
+    },
+    setCookie(user) {
+      this.$cookies.set('cookie-name', user, {
+        path: '/',
+        // maxAge: 60 * 60 * 24 * 7
+        maxAge: 60
+      })
     }
   },
   computed: {},
-  asyncData({ store, redirect }) {
-    return store.dispatch('checkUser').then(res => {
-      if (store.state.auth.user) {
-        console.log(store.state.auth.user)
-        return redirect('/')
+  beforeMount() {
+    if (this.$store.state.auth.user) {
+      console.log(store.state.auth.user)
+      this.$router.push('/')
+    }
+  },
+  watch: {
+    '$store.state.auth.user'() {
+      if (this.$store.state.auth.user) {
+        console.log('router push')
+        this.$router.push('/')
       }
-    })
+    }
   },
   head() {
     return {
@@ -154,6 +171,11 @@ export default {
         > .yahoo {
           width: 80px;
         }
+      }
+      > .twitter {
+        color: #8da291;
+        font-size: 22px;
+        font-weight: bold;
       }
       > .google-area {
         border-left: 1px solid $secondary;
