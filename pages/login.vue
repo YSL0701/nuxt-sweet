@@ -3,15 +3,9 @@
     <div class="login-area">
       <div class="title">會員登入</div>
       <div class="mobile-other-account">
-        <a href="javascript:">
-          <div @click="fbLogin_redirect"><img src="~/static/image/ic-facebook-logotype.svg" alt="" class="facebook"></div>
-        </a>
-        <a href="javascript:">
-          <div class="google-area"><img src="~/static/image/ic-google.svg" alt="" class="google"></div>
-        </a>
-        <a href="javascript:">
-          <div><img src="~/static/image/ic-yahoo.svg" alt="" class="yahoo"></div>
-        </a>
+        <div @click="fbLogin_redirect"><img src="~/static/image/ic-facebook-logotype.svg" alt="" class="facebook"></div>
+        <div @click="googleLogin_redirect" class="google-area"><img src="~/static/image/ic-google.svg" alt="" class="google"></div>
+        <div @click="twitterLogin_redirect">Twitter</div>
       </div>
       <div class="login-info">
         <div class="account">
@@ -40,9 +34,12 @@
     <div class="other-account">
       <div class="title">—— 連結社群帳號 ——</div>
       <div class="other-account-icon">
-        <div class="facebook" @click="fbLogin"><img src="~/static/image/ic-facebook-logotype.svg" alt=""></div>
-        <div class="google" @click="googleLogin"><img src="~/static/image/ic-google.svg" alt=""></div>
-        <div class="yahoo" @click="test"><img src="~/static/image/ic-yahoo.svg" alt=""></div>
+        <div class="facebook desktop" @click="fbLogin"><img src="~/static/image/ic-facebook-logotype.svg" alt=""></div>
+        <div class="facebook tablet" @click="fbLogin_redirect"><img src="~/static/image/ic-facebook-logotype.svg" alt=""></div>
+        <div class="google desktop" @click="googleLogin"><img src="~/static/image/ic-google.svg" alt=""></div>
+        <div class="google tablet" @click="googleLogin_redirect"><img src="~/static/image/ic-google.svg" alt=""></div>
+        <div class="twitter desktop" @click="twitterLogin">Twitter</div>
+        <div class="twitter tablet" @click="twitterLogin_redirect">Twitter</div>
       </div>
     </div>
   </div>
@@ -63,22 +60,37 @@ export default {
     googleLogin() {
       this.$store.dispatch('googleLogin')
     },
-    test() {
-      this.$store.dispatch('test')
+    googleLogin_redirect() {
+      this.$store.dispatch('googleLogin_redirect')
     },
     fbLogin() {
       this.$store.dispatch('fbLogin')
     },
     fbLogin_redirect() {
       this.$store.dispatch('fbLogin_redirect')
+    },
+    twitterLogin() {
+      this.$store.dispatch('twitterLogin')
+    },
+    twitterLogin_redirect() {
+      this.$store.dispatch('twitterLogin_redirect')
     }
   },
   computed: {},
+  asyncData({ store, redirect }) {
+    return store.dispatch('checkUser').then(res => {
+      if (store.state.auth.user) {
+        console.log(store.state.auth.user)
+        return redirect('/')
+      }
+    })
+  },
   head() {
     return {
       title: '登入'
     }
-  }
+  },
+  middleware: 'authCheck'
 }
 </script>
 
@@ -126,28 +138,26 @@ export default {
         background-color: $secondary;
         @include flex(row, center, center);
       }
-      > a {
-        display: block;
-        > div {
-          width: 105px;
-          height: 56px;
-          background-color: #ffffff;
-          @include flex(row, center, center);
-          > .facebook {
-            width: 90px;
-          }
-          > .google {
-            width: 70px;
-            margin-top: 5px;
-          }
-          > .yahoo {
-            width: 80px;
-          }
+      > div {
+        width: 105px;
+        height: 56px;
+        background-color: #ffffff;
+        cursor: pointer;
+        @include flex(row, center, center);
+        > .facebook {
+          width: 90px;
         }
-        > .google-area {
-          border-left: 1px solid $secondary;
-          border-right: 1px solid $secondary;
+        > .google {
+          width: 70px;
+          margin-top: 5px;
         }
+        > .yahoo {
+          width: 80px;
+        }
+      }
+      > .google-area {
+        border-left: 1px solid $secondary;
+        border-right: 1px solid $secondary;
       }
     }
     .login-info {
@@ -319,9 +329,19 @@ export default {
           height: 30px;
         }
       }
-      > .yahoo {
-        img {
-          height: 22px;
+      > .twitter {
+        color: #8da291;
+        font-size: 27px;
+        font-weight: bold;
+      }
+      > .desktop {
+        @include media($tablet-w) {
+          display: none;
+        }
+      }
+      > .tablet {
+        @include media($desktop) {
+          display: none;
         }
       }
     }
