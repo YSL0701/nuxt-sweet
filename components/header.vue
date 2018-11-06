@@ -16,9 +16,8 @@
           <nuxt-link to="/product" class="nuxtLink">甜點</nuxt-link>
         </li>
         <li>
-          <nuxt-link to="/login" class="nuxtLink" v-if="!user && reflashEnd">登入</nuxt-link>
-          <div class="nuxtLink logout" v-else-if="user && reflashEnd" @click="logout">登出</div>
-          <div class="nuxtLink" v-else></div>
+          <nuxt-link to="/login" class="nuxtLink" v-if="!isLogin">登入</nuxt-link>
+          <div class="nuxtLink logout" v-else @click="logout">登出</div>
         </li>
         <li class="cart">
           <nuxt-link to="/cart" class="nuxtLink"><i class="material-icons">shopping_cart</i></nuxt-link>
@@ -37,18 +36,26 @@ export default {
   },
   methods: {
     logout() {
-      this.$store.dispatch('logout')
+      this.$store.dispatch('logout').then(cookie => {
+        this.$cookies.remove(cookie)
+      })
     }
   },
   computed: {
     user() {
       return this.$store.state.auth.user
+    },
+    isLogin() {
+      return this.$store.state.auth.isLogin
     }
   },
   created() {
-    this.$store.dispatch('checkUser').then(res => {
-      this.reflashEnd = true
-    })
+    if (this.$cookies.get('uid')) {
+      this.$store.commit('loginStatus', true)
+      this.$store.dispatch('checkUser')
+    } else {
+      this.$store.commit('loginStatus', false)
+    }
   }
 }
 </script>

@@ -1,5 +1,5 @@
-export default function({ store, redirect }) {
-  if (store.state.auth.user) {
+export default function({ app, redirect }) {
+  if (app.$cookies.get('uid')) {
     return redirect('/')
   }
 }

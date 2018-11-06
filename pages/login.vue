@@ -3,9 +3,9 @@
     <div class="login-area">
       <div class="title">會員登入</div>
       <div class="mobile-other-account">
-        <div @click="fbLogin_redirect"><img src="~/static/image/ic-facebook-logotype.svg" alt="" class="facebook"></div>
-        <div @click="googleLogin_redirect" class="google-area"><img src="~/static/image/ic-google.svg" alt="" class="google"></div>
-        <div @click="twitterLogin_redirect" class="twitter">Twitter</div>
+        <div @click="fbLogin"><img src="~/static/image/ic-facebook-logotype.svg" alt="" class="facebook"></div>
+        <div @click="googleLogin" class="google-area"><img src="~/static/image/ic-google.svg" alt="" class="google"></div>
+        <div @click="twitterLogin" class="twitter">Twitter</div>
       </div>
       <div class="login-info">
         <div class="account">
@@ -35,11 +35,8 @@
       <div class="title">—— 連結社群帳號 ——</div>
       <div class="other-account-icon">
         <div class="facebook desktop" @click="fbLogin"><img src="~/static/image/ic-facebook-logotype.svg" alt=""></div>
-        <div class="facebook tablet" @click="fbLogin_redirect"><img src="~/static/image/ic-facebook-logotype.svg" alt=""></div>
         <div class="google desktop" @click="googleLogin"><img src="~/static/image/ic-google.svg" alt=""></div>
-        <div class="google tablet" @click="googleLogin_redirect"><img src="~/static/image/ic-google.svg" alt=""></div>
         <div class="twitter desktop" @click="twitterLogin">Twitter</div>
-        <div class="twitter tablet" @click="twitterLogin_redirect">Twitter</div>
       </div>
     </div>
   </div>
@@ -59,41 +56,33 @@ export default {
     },
     googleLogin() {
       this.$store.dispatch('googleLogin').then(user => {
-        this.setCookie(user)
-        console.log(user)
-        console.log(this.$cookies.get('cookie-name'))
+        this.setLoginCookie(user.uid)
       })
     },
-    googleLogin_redirect() {
-      this.$store.dispatch('googleLogin_redirect')
-    },
     fbLogin() {
-      this.$store.dispatch('fbLogin')
-    },
-    fbLogin_redirect() {
-      this.$store.dispatch('fbLogin_redirect')
+      this.$store.dispatch('fbLogin').then(user => {
+        this.setLoginCookie(user.uid)
+      })
     },
     twitterLogin() {
-      this.$store.dispatch('twitterLogin')
+      this.$store.dispatch('twitterLogin').then(user => {
+        this.setLoginCookie(user.uid)
+      })
     },
-    twitterLogin_redirect() {
-      this.$store.dispatch('twitterLogin_redirect')
-    },
-    setCookie(user) {
-      this.$cookies.set('cookie-name', user, {
+    setLoginCookie(uid) {
+      this.$cookies.set('uid', uid, {
         path: '/',
         // maxAge: 60 * 60 * 24 * 7
-        maxAge: 60
+        maxAge: 60 * 60
       })
     }
   },
   computed: {},
-  beforeMount() {
-    if (this.$store.state.auth.user) {
-      console.log(store.state.auth.user)
-      this.$router.push('/')
-    }
-  },
+  // beforeMount() {
+  //   if (this.$store.state.auth.user) {
+  //     this.$router.push('/')
+  //   }
+  // },
   watch: {
     '$store.state.auth.user'() {
       if (this.$store.state.auth.user) {
