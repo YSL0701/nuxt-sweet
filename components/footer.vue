@@ -118,6 +118,7 @@ footer {
           height: $input-height;
           color: $primary;
           background-color: #ffe180;
+          cursor: pointer;
           @include flex(row, center, center);
         }
       }
