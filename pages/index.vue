@@ -36,7 +36,7 @@
     </div>
     <!-- 選單類別商品預覽 -->
     <div class="product-preview">
-      <productCard v-for="item in productUrl" :url="item.url" :key="item.id" />
+      <productCard v-for="item in products" :product="item" :key="item.id" />
     </div>
   </div>
 </template>
@@ -47,8 +47,9 @@ import indexMmenu from '~/components/indexMenu.vue'
 import productCard from '~/components/productCard.vue'
 export default {
   asyncData() {
-    return axios.get(`${process.env.BASE_URL}/product.json`).then(res => {
-      return { productUrl: res.data }
+    return axios.get(`${process.env.PRODUCT_API}/products/all`).then(res => {
+      var previewProduct = res.data.products.filter((product, index) => index < 3)
+      return { products: previewProduct }
     })
   },
   components: {

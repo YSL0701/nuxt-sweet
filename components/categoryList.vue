@@ -2,31 +2,33 @@
   <div class="category">
     <ul>
       <li>
-        <div class="cat-title">甜點類別</div>
+        <div class="title">甜點類別</div>
       </li>
       <li>
-        <a href="javascript:">
-          <div class="all active">所有甜點（48）</div>
-        </a>
+        <nuxt-link to="/product" class="all nuxtlink" :class="{active:!params}">所有甜點（48）</nuxt-link>
       </li>
       <li>
-        <a href="javascript:">
-          <div class="today-selection">本日精選（10）</div>
-        </a>
+        <nuxt-link to="/product/today" class="today-selection nuxtlink" :class="{active:params === 'today'}">本日精選（10）</nuxt-link>
       </li>
       <li>
-        <a href="javascript:">
-          <div class="popular">人氣推薦（26）</div>
-        </a>
+        <nuxt-link to="/product/popular" class="popular nuxtlink" :class="{active:params === 'popular'}">人氣推薦（26）</nuxt-link>
       </li>
       <li>
-        <a href="javascript:">
-          <div class="new">新品上市（12）</div>
-        </a>
+        <nuxt-link to="/product/new" class="new nuxtlink" :class="{active:params === 'new'}">新品上市（12）</nuxt-link>
       </li>
     </ul>
   </div>
 </template>
+
+<script>
+export default {
+  computed: {
+    params() {
+      return this.$route.params.category
+    }
+  }
+}
+</script>
 
 <style lang="scss" scoped>
 .category {
@@ -44,21 +46,10 @@
     margin: 0;
     padding: 0;
     list-style: none;
-    > li:first-child {
-      div {
-        background-color: $primary;
-        color: $secondary;
-      }
-    }
     > li {
-      a {
-        text-decoration: none;
-        display: inline-block;
-        @include media($tablet) {
-          width: 100%;
-        }
-      }
-      div {
+      display: block;
+      > div,
+      > .nuxtlink {
         width: $category-width;
         height: $category-height;
         font-size: 24px;
@@ -68,7 +59,12 @@
           width: 100%;
         }
       }
-      div:not(.cat-title) {
+      > .title {
+        background-color: $primary;
+        color: $secondary;
+      }
+      .nuxtlink {
+        text-decoration: none;
         color: $primary;
         border-left: 1px solid $secondary;
         border-right: 1px solid $secondary;

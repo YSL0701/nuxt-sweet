@@ -1,16 +1,16 @@
 <template>
   <div class="product-card">
-    <div class="product-image" :style="{backgroundImage: `url(${url})`}">
+    <div class="product-image" :style="{backgroundImage: `url(${product.imageUrl})`}">
       <div class="product-tag">
-        <div class="tag-text">本日精選</div>
+        <div class="tag-text">{{product.category}}</div>
       </div>
       <div class="heart">
         <i class="far fa-heart"></i>
       </div>
     </div>
     <div class="product-info">
-      <div class="product-name">焦糖馬卡龍</div>
-      <div class="price">NT$ 450</div>
+      <div class="product-name">{{product.title}}</div>
+      <div class="price">NT$ {{product.price}}</div>
     </div>
     <div class="add-to-cart">加入購物車</div>
   </div>
@@ -18,7 +18,10 @@
 
 <script>
 export default {
-  props: ['url']
+  props: ['product'],
+  data() {
+    return {}
+  }
 }
 </script>
 

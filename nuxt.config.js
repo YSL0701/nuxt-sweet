@@ -15,7 +15,7 @@ module.exports = {
       { 'http-equiv': 'X-UA-Compatible', content: 'ie=edge' }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: './favicon.ico' },
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
       { rel: 'stylesheet', href: 'https://fonts.googleapis.com/icon?family=Material+Icons' },
       {
         rel: 'stylesheet',
@@ -60,6 +60,7 @@ module.exports = {
     extend(config, ctx) {}
   },
   env: {
-    BASE_URL: process.env.NODE_ENV === 'production' ? 'https://sweetaste.herokuapp.com/' : 'http://localhost:3000'
+    BASE_URL: process.env.NODE_ENV === 'production' ? 'https://sweetaste.herokuapp.com/' : 'http://localhost:3000',
+    PRODUCT_API: 'https://vue-course-api.hexschool.io/api/sweetaste'
   }
 }
