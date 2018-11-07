@@ -7,34 +7,19 @@
     </div>
     <div class="product-list">
       <categoryList />
-      <div class="product">
-        <productCard v-for="item in productUrl" :url="item.url" :key="item.id" />
-      </div>
+      <nuxt-child />
     </div>
     <pagination />
   </div>
 </template>
 
 <script>
-import axios from 'axios'
 import categoryList from '~/components/categoryList.vue'
-import productCard from '~/components/productCard.vue'
 import pagination from '~/components/pagination.vue'
 export default {
-  asyncData() {
-    return axios.get(`${process.env.BASE_URL}/product.json`).then(res => {
-      return { productUrl: res.data }
-    })
-  },
   components: {
     categoryList,
-    productCard,
     pagination
-  },
-  head() {
-    return {
-      title: '甜點'
-    }
   }
 }
 </script>
@@ -88,16 +73,6 @@ export default {
     }
     @include media($mobile) {
       margin-top: 0;
-    }
-    > .product {
-      width: 620px;
-      margin-top: -20px;
-      @include flex(row, space-between);
-      flex-wrap: wrap;
-      @include media($tablet) {
-        width: 100%;
-        @include flex(row, center);
-      }
     }
   }
 }
