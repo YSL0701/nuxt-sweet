@@ -1,26 +1,24 @@
 <template>
   <div class="main">
-    <div class="login-area">
+    <div class="registered-area">
       <div class="title">註冊帳號</div>
       <div class="mobile-other-account">
-        <a href="javascript:">
-          <div><img src="~/static/image/ic-facebook-logotype.svg" alt="" class="facebook"></div>
-        </a>
-        <a href="javascript:">
-          <div class="google-area"><img src="~/static/image/ic-google.svg" alt="" class="google"></div>
-        </a>
-        <a href="javascript:">
-          <div><img src="~/static/image/ic-yahoo.svg" alt="" class="yahoo"></div>
-        </a>
+        <div @click="fbLogin"><img src="~/static/image/ic-facebook-logotype.svg" alt="" class="facebook"></div>
+        <div @click="googleLogin" class="google-area"><img src="~/static/image/ic-google.svg" alt="" class="google"></div>
+        <div @click="twitterLogin" class="twitter">Twitter</div>
       </div>
-      <div class="login-info">
+      <div class="registered-info">
         <div class="account">
           <div class="account-icon"><i class="material-icons">assignment_ind</i></div>
           <input type="email" placeholder="電子信箱" v-model="email">
         </div>
         <div class="password">
           <div class="password-icon"><i class="material-icons">vpn_key</i></div>
-          <input type="password" placeholder="請輸入使用者密碼" v-model="password">
+          <input type="password" placeholder="密碼(6~12位英文數字組合)" v-model="password">
+        </div>
+        <div class="password">
+          <div class="password-icon"><i class="material-icons">vpn_key</i></div>
+          <input type="password" placeholder="確認密碼" v-model="passwordCheck">
         </div>
         <label for="remember" class="remember">
           <input type="checkbox" id="remember" class="checkbox">
@@ -28,17 +26,19 @@
           <span class="uncheck"><i class="material-icons">check_box_outline_blank</i></span>
           訂閱最新消息
         </label>
+        <nuxt-link to="/login" class="registered">
+          <div class="triangle"></div>
+          <span>登入</span>
+        </nuxt-link>
       </div>
-      <a href="javascript:">
-        <div class="login" @click="emailLogin">建立新帳號</div>
-      </a>
+      <div class="registered" @click="emailRegistered">建立新帳號</div>
     </div>
     <div class="other-account">
       <div class="title">—— 連結社群帳號 ——</div>
       <div class="other-account-icon">
-        <div class="facebook"><img src="~/static/image/ic-facebook-logotype.svg" alt=""></div>
+        <div class="facebook" @click="fbLogin"><img src="~/static/image/ic-facebook-logotype.svg" alt=""></div>
         <div class="google" @click="googleLogin"><img src="~/static/image/ic-google.svg" alt=""></div>
-        <div class="yahoo" @click="test"><img src="~/static/image/ic-yahoo.svg" alt=""></div>
+        <div class="twitter" @click="twitterLogin">Twitter</div>
       </div>
     </div>
   </div>
@@ -49,26 +49,80 @@ export default {
   data() {
     return {
       email: '',
-      password: ''
+      password: '',
+      passwordCheck: ''
     }
   },
   methods: {
-    emailLogin() {
-      this.$store.dispatch('emailLogin', { email: this.email, password: this.password })
+    emailRegistered() {
+      if (this.emailValidate && this.passwordValidate && this.confermPassword) {
+        this.$store.dispatch('emailRegistered', { email: this.email, password: this.password }).then(user => {
+          this.setLoginCookie(user.uid)
+        })
+      }
     },
     googleLogin() {
-      this.$store.dispatch('googleLogin')
+      this.$store.dispatch('googleLogin').then(user => {
+        this.setLoginCookie(user.uid)
+      })
     },
-    test() {
-      this.$store.dispatch('test')
+    fbLogin() {
+      this.$store.dispatch('fbLogin').then(user => {
+        this.setLoginCookie(user.uid)
+      })
+    },
+    twitterLogin() {
+      this.$store.dispatch('twitterLogin').then(user => {
+        this.setLoginCookie(user.uid)
+      })
+    },
+    setLoginCookie(uid) {
+      this.$cookies.set('uid', uid, {
+        path: '/',
+        // maxAge: 60 * 60 * 24 * 7
+        maxAge: 60 * 60
+      })
     }
   },
-  computed: {},
+  computed: {
+    emailValidate() {
+      var emailRule = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z]+$/
+      if (emailRule.test(this.email) && this.email) {
+        return true
+      } else {
+        return false
+      }
+    },
+    passwordValidate() {
+      var passwordRule = /^([0-9]+[a-zA-Z]+|[a-zA-Z]+[0-9]+)[0-9a-zA-Z]*$/
+      if (passwordRule.test(this.password) && this.password.length > 5 && this.password.length < 13) {
+        return true
+      } else {
+        return false
+      }
+    },
+    confermPassword() {
+      if (this.password === this.passwordCheck && this.passwordValidate) {
+        return true
+      } else {
+        return false
+      }
+    }
+  },
+  watch: {
+    '$store.state.auth.user'() {
+      if (this.$store.state.auth.user) {
+        console.log('router push')
+        this.$router.push('/')
+      }
+    }
+  },
   head() {
     return {
       title: '註冊帳號'
     }
-  }
+  },
+  middleware: 'authCheck'
 }
 </script>
 
@@ -86,14 +140,14 @@ export default {
   @include media($mobile) {
     width: 100%;
   }
-  > .login-area {
+  > .registered-area {
     background-color: $primary;
     width: 390px;
-    height: 380px;
+    height: 478px;
     @include flex(column, flex-start, center);
     @include media($mobile) {
       width: 100%;
-      height: 511px;
+      height: 609px;
     }
     > .title {
       height: 50px;
@@ -116,31 +170,32 @@ export default {
         background-color: $secondary;
         @include flex(row, center, center);
       }
-      > a {
-        display: block;
-        > div {
-          width: 105px;
-          height: 56px;
-          background-color: #ffffff;
-          @include flex(row, center, center);
-          > .facebook {
-            width: 90px;
-          }
-          > .google {
-            width: 70px;
-            margin-top: 5px;
-          }
-          > .yahoo {
-            width: 80px;
-          }
+      > div {
+        width: 33%;
+        max-width: 200px;
+        height: 56px;
+        background-color: #ffffff;
+        cursor: pointer;
+        @include flex(row, center, center);
+        > .facebook {
+          width: 90px;
         }
-        > .google-area {
-          border-left: 1px solid $secondary;
-          border-right: 1px solid $secondary;
+        > .google {
+          width: 70px;
+          margin-top: 5px;
         }
       }
+      > .twitter {
+        color: #8da291;
+        font-size: 22px;
+        font-weight: bold;
+      }
+      > .google-area {
+        border-left: 1px solid $secondary;
+        border-right: 1px solid $secondary;
+      }
     }
-    .login-info {
+    .registered-info {
       margin-top: 40px;
       width: calc(100% - 60px);
       @include media($mobile) {
@@ -248,25 +303,21 @@ export default {
         }
       }
     }
-    > a {
-      display: block;
-      text-decoration: none;
+    > .registered {
+      width: 390px;
+      height: 65px;
       margin-top: auto;
+      cursor: pointer;
+      background-color: #ffe180;
+      color: $primary;
+      font-size: 24px;
+      font-weight: bold;
+      transition: background-color, 0.3s;
+      @include flex(row, center, center);
       @include media($mobile) {
         width: 100%;
       }
-      > .login {
-        width: 390px;
-        height: 65px;
-        background-color: #ffe180;
-        color: $primary;
-        font-size: 24px;
-        font-weight: bold;
-        transition: background-color, 0.3s;
-        @include flex(row, center, center);
-        @include media($mobile) {
-          width: 100%;
-        }
+      @include media($desktop) {
         &:hover {
           background-color: darken(#ffe180, 10%);
         }
@@ -309,10 +360,10 @@ export default {
           height: 30px;
         }
       }
-      > .yahoo {
-        img {
-          height: 22px;
-        }
+      > .twitter {
+        color: #8da291;
+        font-size: 27px;
+        font-weight: bold;
       }
     }
   }

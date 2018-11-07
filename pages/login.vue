@@ -27,16 +27,14 @@
           <span>註冊新帳號</span>
         </nuxt-link>
       </div>
-      <a href="javascript:">
-        <div class="login" @click="emailLogin">登入帳號</div>
-      </a>
+      <div class="login" @click="emailLogin">登入帳號</div>
     </div>
     <div class="other-account">
       <div class="title">—— 連結社群帳號 ——</div>
       <div class="other-account-icon">
-        <div class="facebook desktop" @click="fbLogin"><img src="~/static/image/ic-facebook-logotype.svg" alt=""></div>
-        <div class="google desktop" @click="googleLogin"><img src="~/static/image/ic-google.svg" alt=""></div>
-        <div class="twitter desktop" @click="twitterLogin">Twitter</div>
+        <div class="facebook" @click="fbLogin"><img src="~/static/image/ic-facebook-logotype.svg" alt=""></div>
+        <div class="google" @click="googleLogin"><img src="~/static/image/ic-google.svg" alt=""></div>
+        <div class="twitter" @click="twitterLogin">Twitter</div>
       </div>
     </div>
   </div>
@@ -52,7 +50,9 @@ export default {
   },
   methods: {
     emailLogin() {
-      this.$store.dispatch('emailLogin', { email: this.email, password: this.password })
+      this.$store.dispatch('emailLogin', { email: this.email, password: this.password }).then(user => {
+        this.setLoginCookie(user.uid)
+      })
     },
     googleLogin() {
       this.$store.dispatch('googleLogin').then(user => {
@@ -145,7 +145,8 @@ export default {
         @include flex(row, center, center);
       }
       > div {
-        width: 105px;
+        width: 33%;
+        max-width: 200px;
         height: 56px;
         background-color: #ffffff;
         cursor: pointer;
@@ -156,9 +157,6 @@ export default {
         > .google {
           width: 70px;
           margin-top: 5px;
-        }
-        > .yahoo {
-          width: 80px;
         }
       }
       > .twitter {
@@ -279,25 +277,21 @@ export default {
         }
       }
     }
-    > a {
-      display: block;
-      text-decoration: none;
+    > .login {
+      width: 390px;
+      height: 65px;
       margin-top: auto;
+      cursor: pointer;
+      background-color: #ffe180;
+      color: $primary;
+      font-size: 24px;
+      font-weight: bold;
+      transition: background-color, 0.3s;
+      @include flex(row, center, center);
       @include media($mobile) {
         width: 100%;
       }
-      > .login {
-        width: 390px;
-        height: 65px;
-        background-color: #ffe180;
-        color: $primary;
-        font-size: 24px;
-        font-weight: bold;
-        transition: background-color, 0.3s;
-        @include flex(row, center, center);
-        @include media($mobile) {
-          width: 100%;
-        }
+      @include media($desktop) {
         &:hover {
           background-color: darken(#ffe180, 10%);
         }
@@ -344,16 +338,6 @@ export default {
         color: #8da291;
         font-size: 27px;
         font-weight: bold;
-      }
-      > .desktop {
-        @include media($tablet-w) {
-          display: none;
-        }
-      }
-      > .tablet {
-        @include media($desktop) {
-          display: none;
-        }
       }
     }
   }

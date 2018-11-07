@@ -20,11 +20,21 @@ export default {
   },
   actions: {
     emailRegistered({ commit }, payload) {
-      auth.createUserWithEmailAndPassword(payload.email, payload.password).then(user => user)
+      return new Promise((resolve, reject) => {
+        auth.createUserWithEmailAndPassword(payload.email, payload.password).then(user => {
+          commit('setUser', user.user)
+          commit('loginStatus', true)
+          resolve(user.user)
+        })
+      })
     },
     emailLogin({ commit }, payload) {
-      auth.signInWithEmailAndPassword(payload.email, payload.password).then(user => {
-        commit('setUser', user)
+      return new Promise((resolve, reject) => {
+        auth.signInWithEmailAndPassword(payload.email, payload.password).then(user => {
+          commit('setUser', user)
+          commit('loginStatus', true)
+          resolve(user.user)
+        })
       })
     },
     googleLogin({ commit }, payload) {
