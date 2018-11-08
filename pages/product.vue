@@ -17,6 +17,27 @@
 import categoryList from '~/components/categoryList.vue'
 import pagination from '~/components/pagination.vue'
 export default {
+  watch: {
+    $route() {
+      var width = window.innerWidth
+      if (width < 768) {
+        window.scrollTo({
+          top: 600,
+          behavior: 'smooth'
+        })
+      } else if (width > 991) {
+        window.scrollTo({
+          top: 500,
+          behavior: 'smooth'
+        })
+      } else {
+        window.scrollTo({
+          top: 800,
+          behavior: 'smooth'
+        })
+      }
+    }
+  },
   components: {
     categoryList,
     pagination

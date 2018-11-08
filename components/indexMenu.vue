@@ -1,18 +1,18 @@
 <template>
   <div class="product-menu">
-    <div @click="correctCategory = 1" class="edge" :class="{correct:correctCategory===1}">
+    <div @click="categoryChange('本日精選')" class="edge" :class="{current:currentCategory==='本日精選'}">
       <div class="today-featured">
         <div class="transparent"></div>
       </div>
       <div class="text">本日精選</div>
     </div>
-    <div @click="correctCategory = 2" class="edge" :class="{correct:correctCategory===2}">
+    <div @click="categoryChange('人氣推薦')" class="edge" :class="{current:currentCategory==='人氣推薦'}">
       <div class="most-popular">
         <div class="transparent"></div>
       </div>
       <div class="text">人氣推薦</div>
     </div>
-    <div @click="correctCategory = 3" class="edge" :class="{correct:correctCategory===3}">
+    <div @click="categoryChange('新品上市')" class="edge" :class="{current:currentCategory==='新品上市'}">
       <div class="new-product">
         <div class="transparent"></div>
       </div>
@@ -23,9 +23,30 @@
 
 <script>
 export default {
+  props: ['currentCategory'],
   data() {
-    return {
-      correctCategory: 1
+    return {}
+  },
+  methods: {
+    categoryChange(category) {
+      this.$emit('update:currentCategory', category)
+      var width = window.innerWidth
+      if (width > 767) {
+        window.scrollTo({
+          top: 2170,
+          behavior: 'smooth'
+        })
+      } else if (width < 414) {
+        window.scrollTo({
+          top: 1800,
+          behavior: 'smooth'
+        })
+      } else {
+        window.scrollTo({
+          top: 1600,
+          behavior: 'smooth'
+        })
+      }
     }
   }
 }
@@ -112,7 +133,7 @@ export default {
       }
     }
   }
-  .correct {
+  .current {
     .today-featured,
     .most-popular,
     .new-product {

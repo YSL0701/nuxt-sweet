@@ -10,12 +10,21 @@ import productCard from '~/components/productCard.vue'
 
 export default {
   asyncData({ store }) {
-    return store.dispatch('getProductsByPage').then(() => {
+    if (store.state.product.productsByPage.length < 1) {
+      return store.dispatch('getProductsByPage').then(() => {
+        return { products: store.state.product.productsByPage }
+      })
+    } else {
       return { products: store.state.product.productsByPage }
-    })
+    }
   },
   components: {
     productCard
+  },
+  fetch({ store }) {
+    if (store.state.product.allProducts.length < 1) {
+      return store.dispatch('getAllProducts')
+    }
   },
   head() {
     return {

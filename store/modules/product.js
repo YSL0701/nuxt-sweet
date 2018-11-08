@@ -7,7 +7,7 @@ export default {
   },
   mutations: {
     setProducts(state, payload) {
-      state.allProducts = payload
+      state.allProducts = payload.reverse()
     },
     setProductsByPage(state, payload) {
       state.productsByPage = payload

@@ -10,7 +10,7 @@ import productCard from '~/components/productCard.vue'
 
 export default {
   asyncData({ store, params }) {
-    var currentCategory = () => {
+    var categoryCheck = () => {
       if (params.category === 'today') {
         return '本日精選'
       } else if (params.category === 'popular') {
@@ -19,14 +19,13 @@ export default {
         return '新品上市'
       }
     }
+    var currentCategory = categoryCheck()
     if (store.state.product.allProducts.length < 1) {
       return store.dispatch('getAllProducts').then(() => {
-        console.log('aaa')
-        return { products: store.state.product.allProducts.filter(item => item.category === currentCategory()) }
+        return { products: store.state.product.allProducts.filter(item => item.category === currentCategory) }
       })
     } else {
-      console.log('bbb')
-      return { products: store.state.product.allProducts.filter(item => item.category === currentCategory()) }
+      return { products: store.state.product.allProducts.filter(item => item.category === currentCategory) }
     }
   },
   components: {

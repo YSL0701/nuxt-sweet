@@ -2,7 +2,7 @@
   <div class="main">
     <div class="image"></div>
     <!-- 商品類別選單 -->
-    <indexMmenu />
+    <indexMmenu :current-category.sync="currentCategory" />
     <!-- 說明理由區域 -->
     <div class="why-make">
       <img src="~/static/image/sm-橫式-為什麼選擇了做甜點.svg" alt="為什麼選擇了做甜點" class="mobile-why-make">
@@ -46,11 +46,26 @@ import axios from 'axios'
 import indexMmenu from '~/components/indexMenu.vue'
 import productCard from '~/components/productCard.vue'
 export default {
-  asyncData() {
-    return axios.get(`${process.env.PRODUCT_API}/products/all`).then(res => {
-      var previewProduct = res.data.products.filter((product, index) => index < 3)
-      return { products: previewProduct }
-    })
+  asyncData({ store }) {
+    var currentCategory = '本日精選'
+    if (store.state.product.allProducts.length < 1) {
+      return store.dispatch('getAllProducts').then(() => {
+        return {
+          products: store.state.product.allProducts.filter((product, index) => index < 3 && product.category === currentCategory),
+          currentCategory
+        }
+      })
+    } else {
+      return {
+        products: store.state.product.allProducts.filter((product, index) => index < 3 && product.category === currentCategory),
+        currentCategory
+      }
+    }
+  },
+  watch: {
+    currentCategory() {
+      this.products = this.$store.state.product.allProducts.filter((product, index) => index < 3 && product.category === this.currentCategory)
+    }
   },
   components: {
     indexMmenu,

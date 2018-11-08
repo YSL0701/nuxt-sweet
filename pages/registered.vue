@@ -31,7 +31,7 @@
           <span>登入</span>
         </nuxt-link>
       </div>
-      <div class="registered" @click="emailRegistered">建立新帳號</div>
+      <div class="registered" @click="emailRegistered">註冊帳號</div>
     </div>
     <div class="other-account">
       <div class="title">—— 連結社群帳號 ——</div>

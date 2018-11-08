@@ -5,16 +5,16 @@
         <div class="title">甜點類別</div>
       </li>
       <li>
-        <nuxt-link to="/product" class="all nuxtlink" :class="{active:!params}">所有甜點（48）</nuxt-link>
+        <nuxt-link to="/product" class="all nuxtlink" :class="{active:!params}">所有甜點（{{allProductCount}}）</nuxt-link>
       </li>
       <li>
-        <nuxt-link to="/product/today" class="today-selection nuxtlink" :class="{active:params === 'today'}">本日精選（10）</nuxt-link>
+        <nuxt-link to="/product/today" class="today-selection nuxtlink" :class="{active:params === 'today'}">本日精選（{{todayCount}}）</nuxt-link>
       </li>
       <li>
-        <nuxt-link to="/product/popular" class="popular nuxtlink" :class="{active:params === 'popular'}">人氣推薦（26）</nuxt-link>
+        <nuxt-link to="/product/popular" class="popular nuxtlink" :class="{active:params === 'popular'}">人氣推薦（{{popularCount}}）</nuxt-link>
       </li>
       <li>
-        <nuxt-link to="/product/new" class="new nuxtlink" :class="{active:params === 'new'}">新品上市（12）</nuxt-link>
+        <nuxt-link to="/product/new" class="new nuxtlink" :class="{active:params === 'new'}">新品上市（{{newCount}}）</nuxt-link>
       </li>
     </ul>
   </div>
@@ -25,6 +25,18 @@ export default {
   computed: {
     params() {
       return this.$route.params.category
+    },
+    allProductCount() {
+      return this.$store.state.product.allProducts.length
+    },
+    todayCount() {
+      return this.$store.state.product.allProducts.filter(item => item.category === '本日精選').length
+    },
+    popularCount() {
+      return this.$store.state.product.allProducts.filter(item => item.category === '人氣推薦').length
+    },
+    newCount() {
+      return this.$store.state.product.allProducts.filter(item => item.category === '新品上市').length
     }
   }
 }
