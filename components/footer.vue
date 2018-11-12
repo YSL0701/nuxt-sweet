@@ -120,6 +120,12 @@ footer {
           background-color: #ffe180;
           cursor: pointer;
           @include flex(row, center, center);
+          @include media($desktop) {
+            transition: background-color 0.3s;
+            &:hover {
+              background-color: darken(#ffe180, 10%);
+            }
+          }
         }
       }
     }
