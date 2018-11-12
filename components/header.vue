@@ -38,6 +38,7 @@ export default {
     logout() {
       this.$store.dispatch('logout').then(cookie => {
         this.$cookies.remove(cookie)
+        this.$store.commit('removeCartAll')
       })
     }
   },
@@ -55,6 +56,13 @@ export default {
       this.$store.dispatch('checkUser')
     } else {
       this.$store.commit('loginStatus', false)
+    }
+  },
+  watch: {
+    isLogin() {
+      if (this.isLogin) {
+        localStorage.removeItem('cart')
+      }
     }
   }
 }

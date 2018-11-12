@@ -2,6 +2,7 @@
   <div class="container">
     <myHeader></myHeader>
     <nuxt />
+    <message />
     <myFooter></myFooter>
   </div>
 </template>
@@ -9,10 +10,12 @@
 <script>
 import myHeader from '~/components/header.vue'
 import myFooter from '~/components/footer.vue'
+import message from '~/components/message.vue'
 export default {
   components: {
     myHeader,
-    myFooter
+    myFooter,
+    message
   }
 }
 </script>
