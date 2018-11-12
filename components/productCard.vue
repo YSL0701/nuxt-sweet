@@ -12,7 +12,7 @@
       <div class="product-name">{{product.title}}</div>
       <div class="price">NT$ {{product.price}}</div>
     </div>
-    <div class="add-to-cart">加入購物車</div>
+    <div class="add-to-cart" @click="addToCart">加入購物車</div>
   </div>
 </template>
 
@@ -21,6 +21,25 @@ export default {
   props: ['product'],
   data() {
     return {}
+  },
+  methods: {
+    addToCart() {
+      if (!this.cartContent.some(item => item.id === this.product.id)) {
+        this.$store.commit('addToCart', { qty: 1, ...this.product })
+        if (!this.$store.state.auth.isLogin) {
+          this.$store.commit('saveCart')
+        }
+        this.$store.commit('addMessage', {
+          content: `${this.product.title} 已加入購物車`,
+          id: this.product.id
+        })
+      }
+    }
+  },
+  computed: {
+    cartContent() {
+      return this.$store.state.cart.cart
+    }
   }
 }
 </script>
