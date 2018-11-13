@@ -25,15 +25,21 @@ export default {
   methods: {
     addToCart() {
       if (!this.cartContent.some(item => item.id === this.product.id)) {
-        this.$store.commit('addToCart', { qty: 1, ...this.product })
         if (!this.$store.state.auth.isLogin) {
-          this.$store.commit('saveCart')
+          this.$store.commit('saveCartToLocal')
+          this.addMessage()
+        } else {
+          this.$store.dispatch('addToCart', { qty: 1, id: this.product.id, uid: this.$store.state.auth.user.uid }).then(() => {
+            this.addMessage()
+          })
         }
-        this.$store.commit('addMessage', {
-          content: `${this.product.title} 已加入購物車`,
-          id: this.product.id
-        })
       }
+    },
+    addMessage() {
+      this.$store.commit('addMessage', {
+        content: `${this.product.title} 已加入購物車`,
+        id: this.product.id
+      })
     }
   },
   computed: {

@@ -56,17 +56,23 @@ export default {
     },
     googleLogin() {
       this.$store.dispatch('googleLogin').then(user => {
-        this.setLoginCookie(user.uid)
+        this.$store.dispatch('setUserToDb', user).then(() => {
+          this.setLoginCookie(user.uid)
+        })
       })
     },
     fbLogin() {
       this.$store.dispatch('fbLogin').then(user => {
-        this.setLoginCookie(user.uid)
+        this.$store.dispatch('setUserToDb', user).then(() => {
+          this.setLoginCookie(user.uid)
+        })
       })
     },
     twitterLogin() {
       this.$store.dispatch('twitterLogin').then(user => {
-        this.setLoginCookie(user.uid)
+        this.$store.dispatch('setUserToDb', user).then(() => {
+          this.setLoginCookie(user.uid)
+        })
       })
     },
     setLoginCookie(uid) {

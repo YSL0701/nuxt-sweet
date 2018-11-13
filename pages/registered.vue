@@ -57,7 +57,9 @@ export default {
     emailRegistered() {
       if (this.emailValidate && this.passwordValidate && this.confermPassword) {
         this.$store.dispatch('emailRegistered', { email: this.email, password: this.password }).then(user => {
-          this.setLoginCookie(user.uid)
+          this.$store.dispatch('setUserToDb', user).then(() => {
+            this.setLoginCookie(user.uid)
+          })
         })
       }
     },

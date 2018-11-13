@@ -1,5 +1,5 @@
 import firebaseApp from '~/firebase/'
-var { firebase, auth } = firebaseApp
+var { firebase, auth, db } = firebaseApp
 // import Vue from 'vue'
 export default {
   state: {
@@ -117,6 +117,24 @@ export default {
           commit('setUser', user)
           resolve(true)
         })
+      })
+    },
+    setUserToDb({ commit }, payload) {
+      return new Promise((resolve, reject) => {
+        db.collection('users')
+          .doc(payload.uid)
+          .get()
+          .then(user => {
+            if (!user.data()) {
+              db.collection('users')
+                .doc(payload.uid)
+                .set({
+                  uid: payload.uid,
+                  cart: []
+                })
+            }
+            resolve()
+          })
       })
     }
   }
