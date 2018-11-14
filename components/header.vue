@@ -58,6 +58,13 @@ export default {
       this.$store.commit('loginStatus', false)
     }
   },
+  beforeMount() {
+    if (this.isLogin) {
+      this.$store.dispatch('getDbCartData', this.user.uid)
+    } else {
+      this.$store.commit('localDataToCart')
+    }
+  },
   watch: {
     isLogin() {
       if (this.isLogin) {

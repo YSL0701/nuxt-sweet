@@ -26,10 +26,12 @@ export default {
     addToCart() {
       if (!this.cartContent.some(item => item.id === this.product.id)) {
         if (!this.$store.state.auth.isLogin) {
+          this.$store.commit('setCart', this.product)
           this.$store.commit('saveCartToLocal')
           this.addMessage()
         } else {
           this.$store.dispatch('addToCart', { qty: 1, id: this.product.id, uid: this.$store.state.auth.user.uid }).then(() => {
+            this.$store.commit('setCart', this.product)
             this.addMessage()
           })
         }

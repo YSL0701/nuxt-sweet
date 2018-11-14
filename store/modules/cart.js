@@ -7,7 +7,7 @@ export default {
   },
   mutations: {
     setCart(state, payload) {
-      state.cart.push(payload)
+      state.cart.push({ id: payload.id, qty: 1 })
     },
     removeCartAll(state) {
       state.cart = []
@@ -24,7 +24,7 @@ export default {
     localDataToCart(state) {
       var localCart = localStorage.getItem('cart')
       if (localCart) {
-        state.cart = localStorage.getItem('cart')
+        state.cart = JSON.parse(localCart)
       }
     }
   },
@@ -36,6 +36,15 @@ export default {
         .update({
           cart: firebase.firestore.FieldValue.arrayUnion({ id, qty })
         })
+    },
+    getDbCartData({commit},uid){
+      db.collection('users').doc(uid).get().then(user=>{
+        var dbCart = user.data().cart
+        var localCart = localStorage.getItem('cart')
+        if(localCart){
+          JSON.parse(localCart).
+        }
+      })
     }
   }
 }
