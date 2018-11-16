@@ -33,7 +33,7 @@ import cartProductCard from '~/components/cartProductCard.vue'
 export default {
   computed: {
     cartContent() {
-      return this.$store.state.cart
+      return this.$store.state.cart.cart
     }
   },
   components: {

@@ -2,21 +2,28 @@
   <div>
     <div class="product-image image-1"></div>
     <div class="product-info">
-      <div class="name">焦糖馬卡龍</div>
-      <div class="price">NT$ 450</div>
+      <div class="name">{{ cartProduct.title }}</div>
+      <div class="price">NT$ {{ cartProduct.price }}</div>
     </div>
     <div class="counter">
       <div class="minus">-</div>
-      <div class="count">2</div>
+      <div class="count">{{ cartProduct.qty }}</div>
       <div class="add">+</div>
     </div>
-    <div class="subtotal">NT$ 900</div>
+    <div class="subtotal">NT$ {{ subtotal }}</div>
     <div class="delete"><i class="material-icons">delete_outline</i></div>
   </div>
 </template>
 
 <script>
-export default {}
+export default {
+  props: ['cartProduct'],
+  computed: {
+    subtotal() {
+      return this.cartProduct.price * this.cartProduct.qty
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>

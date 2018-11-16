@@ -24,16 +24,25 @@ export default {
   },
   methods: {
     addToCart() {
-      if (!this.cartContent.some(item => item.id === this.product.id)) {
+      if (this.cartContent.every(item => item.id !== this.product.id)) {
         if (!this.$store.state.auth.isLogin) {
-          this.$store.commit('setCart', this.product)
+          this.$store.commit('pushToCart', this.product)
           this.$store.commit('saveCartToLocal')
           this.addMessage()
         } else {
-          this.$store.dispatch('addToCart', { qty: 1, id: this.product.id, uid: this.$store.state.auth.user.uid }).then(() => {
-            this.$store.commit('setCart', this.product)
-            this.addMessage()
-          })
+          this.$store
+            .dispatch('addToDbCart', {
+              qty: 1,
+              id: this.product.id,
+              uid: this.$store.state.auth.user.uid,
+              price: this.product.price,
+              title: this.product.title,
+              imageUrl: this.product.imageUrl
+            })
+            .then(() => {
+              this.$store.commit('pushToCart', this.product)
+              this.addMessage()
+            })
         }
       }
     },

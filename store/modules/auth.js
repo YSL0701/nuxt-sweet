@@ -111,11 +111,13 @@ export default {
           })
       })
     },
-    checkUser({ commit }) {
+    checkUser({ commit }, uid) {
       return new Promise((resolve, reject) => {
         auth.onAuthStateChanged(user => {
           commit('setUser', user)
-          resolve(true)
+          if (user.uid === uid) {
+            resolve(user.uid)
+          }
         })
       })
     },

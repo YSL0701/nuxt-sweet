@@ -40,6 +40,26 @@ export default {
         this.$cookies.remove(cookie)
         this.$store.commit('removeCartAll')
       })
+    },
+    checkLoginStatus() {
+      return new Promise((resolve, reject) => {
+        if (this.$cookies.get('uid')) {
+          this.$store.commit('loginStatus', true)
+          this.$store.dispatch('checkUser', this.$cookies.get('uid')).then(uid => {
+            resolve(uid)
+          })
+        } else {
+          this.$store.commit('loginStatus', false)
+          resolve()
+        }
+      })
+    },
+    cartInit(uid) {
+      if (this.isLogin) {
+        this.$store.dispatch('getDbCartData', uid)
+      } else {
+        this.$store.commit('localDataToCart')
+      }
     }
   },
   computed: {
@@ -51,24 +71,18 @@ export default {
     }
   },
   created() {
-    if (this.$cookies.get('uid')) {
-      this.$store.commit('loginStatus', true)
-      this.$store.dispatch('checkUser')
-    } else {
-      this.$store.commit('loginStatus', false)
-    }
-  },
-  beforeMount() {
-    if (this.isLogin) {
-      this.$store.dispatch('getDbCartData', this.user.uid)
-    } else {
-      this.$store.commit('localDataToCart')
-    }
+    this.checkLoginStatus().then(uid => {
+      this.cartInit(uid)
+    })
   },
   watch: {
     isLogin() {
       if (this.isLogin) {
-        localStorage.removeItem('cart')
+        this.$store.dispatch('getDbCartData', this.user.uid).then(item => {
+          this.$store.dispatch('setCartToDb', { uid: item.uid, mixCart: item.mixCart })
+        })
+      } else {
+        this.$store.commit('localDataToCart')
       }
     }
   }
