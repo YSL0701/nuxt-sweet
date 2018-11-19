@@ -7,7 +7,7 @@ export default {
   },
   mutations: {
     pushToCart(state, { id, price, title, imageUrl }) {
-      state.cart.push({ id, qty: 1, price, title, imageUrl })
+      state.cart.push({ id, qty: 1, price: parseInt(price, 10), title, imageUrl })
     },
     setMutipleProductToCart(state, payload) {
       state.cart = payload
@@ -32,6 +32,9 @@ export default {
       if (localCart) {
         state.cart = JSON.parse(localCart)
       }
+    },
+    qtyModify(state, { index, modify }) {
+      state.cart[index].qty = state.cart[index].qty + modify
     }
   },
   actions: {
@@ -66,12 +69,12 @@ export default {
           })
       })
     },
-    setCartToDb({ commit }, { mixCart, uid }) {
+    updateCartToDb({ commit }, { uid, newCart }) {
       return db
         .collection('users')
         .doc(uid)
-        .set({
-          cart: mixCart
+        .update({
+          cart: newCart
         })
     }
   }

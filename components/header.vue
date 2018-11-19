@@ -79,7 +79,7 @@ export default {
     isLogin() {
       if (this.isLogin) {
         this.$store.dispatch('getDbCartData', this.user.uid).then(item => {
-          this.$store.dispatch('setCartToDb', { uid: item.uid, mixCart: item.mixCart })
+          this.$store.dispatch('updateCartToDb', { uid: item.uid, newCart: item.mixCart })
         })
       } else {
         this.$store.commit('localDataToCart')

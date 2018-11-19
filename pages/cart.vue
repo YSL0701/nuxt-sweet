@@ -3,7 +3,7 @@
     <div class="cart">
       <div class="title">您的購物車</div>
       <div class="content">
-        <cartProductCard v-for="item in cartContent" :cart-product="item" :key="item.id" />
+        <cartProductCard v-for="(item,index) in cartContent" :cart-product="item" :index="index" :key="item.id" />
       </div>
     </div>
     <div class="order">
@@ -11,7 +11,7 @@
       <div class="content">
         <div class="subtotal">
           <div>小計</div>
-          <div>NT$ 2,700</div>
+          <div>NT$ {{ cartSubtotal }}</div>
         </div>
         <div class="freight">
           <div>運費</div>
@@ -34,6 +34,13 @@ export default {
   computed: {
     cartContent() {
       return this.$store.state.cart.cart
+    },
+    cartSubtotal() {
+      var subtotal = 0
+      this.$store.state.cart.cart.forEach(cartProduct => {
+        subtotal = subtotal + cartProduct.qty * cartProduct.price
+      })
+      return subtotal
     }
   },
   components: {
