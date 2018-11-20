@@ -1,8 +1,9 @@
 <template>
   <div class="container">
     <myHeader></myHeader>
-    <nuxt />
+    <loading />
     <message />
+    <nuxt />
     <myFooter></myFooter>
   </div>
 </template>
@@ -11,11 +12,13 @@
 import myHeader from '~/components/header.vue'
 import myFooter from '~/components/footer.vue'
 import message from '~/components/message.vue'
+import loading from '~/components/loading.vue'
 export default {
   components: {
     myHeader,
     myFooter,
-    message
+    message,
+    loading
   }
 }
 </script>

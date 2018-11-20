@@ -50,28 +50,36 @@ export default {
   },
   methods: {
     emailLogin() {
+      this.$store.commit('loadingStatus',true)
       this.$store.dispatch('emailLogin', { email: this.email, password: this.password }).then(user => {
         this.setLoginCookie(user.uid)
+        this.$store.commit('loadingStatus',false)
       })
     },
     googleLogin() {
+      this.$store.commit('loadingStatus',true)
       this.$store.dispatch('googleLogin').then(user => {
         this.$store.dispatch('setUserToDb', user).then(() => {
           this.setLoginCookie(user.uid)
+          this.$store.commit('loadingStatus',false)
         })
       })
     },
     fbLogin() {
+      this.$store.commit('loadingStatus',true)
       this.$store.dispatch('fbLogin').then(user => {
         this.$store.dispatch('setUserToDb', user).then(() => {
           this.setLoginCookie(user.uid)
+          this.$store.commit('loadingStatus',false)
         })
       })
     },
     twitterLogin() {
+      this.$store.commit('loadingStatus',true)
       this.$store.dispatch('twitterLogin').then(user => {
         this.$store.dispatch('setUserToDb', user).then(() => {
           this.setLoginCookie(user.uid)
+          this.$store.commit('loadingStatus',false)
         })
       })
     },

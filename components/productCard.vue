@@ -12,7 +12,8 @@
       <div class="product-name">{{product.title}}</div>
       <div class="price">NT$ {{product.price}}</div>
     </div>
-    <div class="add-to-cart" @click="addToCart">加入購物車</div>
+    <div class="add-to-cart" @click="addToCart" v-if="!cardLoading">加入購物車</div>
+    <div class="loading" v-else><img src="/image/Rolling-1s-200px.svg" alt="loading"></div>
   </div>
 </template>
 
@@ -20,15 +21,21 @@
 export default {
   props: ['product'],
   data() {
-    return {}
+    return {
+      cardLoading: false
+    }
   },
   methods: {
     addToCart() {
       if (this.cartContent.every(item => item.id !== this.product.id)) {
+        this.cardLoading = true
         if (!this.$store.state.auth.isLogin) {
           this.$store.commit('pushToCart', this.product)
           this.$store.commit('saveCartToLocal')
-          this.addMessage()
+          setTimeout(() => {
+            this.cardLoading = false
+            this.addMessage()
+          }, 400)
         } else {
           this.$store
             .dispatch('addToDbCart', {
@@ -41,14 +48,23 @@ export default {
             })
             .then(() => {
               this.$store.commit('pushToCart', this.product)
+              this.cardLoading = false
               this.addMessage()
             })
         }
+      } else {
+        this.hadProductMessage()
       }
     },
     addMessage() {
       this.$store.commit('addMessage', {
         content: `${this.product.title} 已加入購物車`,
+        id: this.product.id
+      })
+    },
+    hadProductMessage() {
+      this.$store.commit('addMessage', {
+        content: `${this.product.title} 已加入過購物車`,
         id: this.product.id
       })
     }
@@ -147,6 +163,15 @@ export default {
     // @include media($mobile) {
     //   width: 315px;
     // }
+  }
+  .loading {
+    width: $card-image-width;
+    height: 65px;
+    background-color: $secondary;
+    @include flex(row, center, center);
+    > img {
+      height: 50px;
+    }
   }
 }
 </style>

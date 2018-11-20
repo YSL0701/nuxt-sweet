@@ -4,6 +4,7 @@ import auth from './modules/auth'
 import product from './modules/product'
 import cart from './modules/cart'
 import message from './modules/message'
+import loading from './modules/loading'
 Vue.use(Vuex)
 
 const store = () =>
@@ -12,7 +13,8 @@ const store = () =>
       auth,
       product,
       cart,
-      message
+      message,
+      loading
     }
   })
 

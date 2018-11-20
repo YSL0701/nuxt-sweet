@@ -19,7 +19,7 @@
         </div>
         <div class="total-price">
           <div>總計</div>
-          <div>NT$ 3,000</div>
+          <div>NT$ {{ total }}</div>
         </div>
       </div>
       <div class="checkout">結帳</div>
@@ -41,6 +41,9 @@ export default {
         subtotal = subtotal + cartProduct.qty * cartProduct.price
       })
       return subtotal
+    },
+    total() {
+      return this.cartSubtotal + 300
     }
   },
   components: {
