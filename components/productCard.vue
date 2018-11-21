@@ -64,7 +64,7 @@ export default {
     },
     hadProductMessage() {
       this.$store.commit('addMessage', {
-        content: `${this.product.title} 已加入過購物車`,
+        content: `${this.product.title} 已在購物車內`,
         id: this.product.id
       })
     }

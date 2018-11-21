@@ -50,38 +50,66 @@ export default {
   },
   methods: {
     emailLogin() {
-      this.$store.commit('loadingStatus',true)
-      this.$store.dispatch('emailLogin', { email: this.email, password: this.password }).then(user => {
-        this.setLoginCookie(user.uid)
-        this.$store.commit('loadingStatus',false)
-      })
+      this.$store.commit('loadingStatus', true)
+      this.$store
+        .dispatch('emailLogin', { email: this.email, password: this.password })
+        .then(user => {
+          this.setLoginCookie(user.uid)
+          this.$store.commit('loadingStatus', false)
+          this.loginMessage(true)
+        })
+        .catch(err => {
+          this.$store.commit('loadingStatus', false)
+          this.loginMessage(false)
+        })
     },
     googleLogin() {
-      this.$store.commit('loadingStatus',true)
-      this.$store.dispatch('googleLogin').then(user => {
-        this.$store.dispatch('setUserToDb', user).then(() => {
-          this.setLoginCookie(user.uid)
-          this.$store.commit('loadingStatus',false)
+      this.$store.commit('loadingStatus', true)
+      this.$store
+        .dispatch('googleLogin')
+        .then(user => {
+          this.$store.dispatch('setUserToDb', user).then(() => {
+            this.setLoginCookie(user.uid)
+            this.$store.commit('loadingStatus', false)
+            this.loginMessage(true)
+          })
         })
-      })
+        .catch(err => {
+          this.$store.commit('loadingStatus', false)
+          this.loginMessage(false)
+        })
     },
     fbLogin() {
-      this.$store.commit('loadingStatus',true)
-      this.$store.dispatch('fbLogin').then(user => {
-        this.$store.dispatch('setUserToDb', user).then(() => {
-          this.setLoginCookie(user.uid)
-          this.$store.commit('loadingStatus',false)
+      this.$store.commit('loadingStatus', true)
+      this.$store
+        .dispatch('fbLogin')
+        .then(user => {
+          this.$store.dispatch('setUserToDb', user).then(() => {
+            this.setLoginCookie(user.uid)
+            this.$store.commit('loadingStatus', false)
+            this.loginMessage(true)
+          })
         })
-      })
+        .catch(err => {
+          this.$store.commit('loadingStatus', false)
+          this.loginMessage(false)
+        })
     },
     twitterLogin() {
-      this.$store.commit('loadingStatus',true)
-      this.$store.dispatch('twitterLogin').then(user => {
-        this.$store.dispatch('setUserToDb', user).then(() => {
-          this.setLoginCookie(user.uid)
-          this.$store.commit('loadingStatus',false)
+      this.$store.commit('loadingStatus', true)
+      this.$store
+        .dispatch('twitterLogin')
+        .then(user => {
+          this.$store.dispatch('setUserToDb', user).then(() => {
+            this.setLoginCookie(user.uid)
+            this.$store.commit('loadingStatus', false)
+            this.loginMessage(true)
+          })
         })
-      })
+        .catch(err => {
+          this.$store.commit('loadingStatus', false)
+          this.loginMessage(false)
+        })
     },
     setLoginCookie(uid) {
       this.$cookies.set('uid', uid, {
@@ -89,6 +117,13 @@ export default {
         // maxAge: 60 * 60 * 24 * 7
         maxAge: 60 * 60
       })
+    },
+    loginMessage(success) {
+      if (success) {
+        this.$store.commit('addMessage', { content: `登入成功，歡迎回來！`, id: 'loginSuccess' })
+      } else {
+        this.$store.commit('addMessage', { content: `登入失敗，請檢查登入資訊`, id: 'loginFalse' })
+      }
     }
   },
   computed: {},

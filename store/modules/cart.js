@@ -35,6 +35,10 @@ export default {
     },
     qtyModify(state, { index, modify }) {
       state.cart[index].qty = state.cart[index].qty + modify
+    },
+    removeCartProduct(state, id) {
+      var removeIndex = state.cart.findIndex(product => product.id === id)
+      state.cart.splice(removeIndex, 1)
     }
   },
   actions: {

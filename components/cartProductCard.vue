@@ -11,7 +11,7 @@
       <div class="add" @click="qtyModify(1)">+</div>
     </div>
     <div class="subtotal">NT$ {{ subtotal }}</div>
-    <div class="delete"><i class="material-icons">delete_outline</i></div>
+    <div class="delete" @click="removeCartProduct"><i class="material-icons">delete_outline</i></div>
   </div>
 </template>
 
@@ -21,6 +21,14 @@ export default {
   methods: {
     qtyModify(modify) {
       this.$store.commit('qtyModify', { index: this.index, modify })
+      if (this.isLogin) {
+        this.$store.dispatch('updateCartToDb', { uid: this.user.uid, newCart: this.cart })
+      } else {
+        this.$store.commit('saveCartToLocal')
+      }
+    },
+    removeCartProduct() {
+      this.$store.commit('removeCartProduct', this.cartProduct.id)
       if (this.isLogin) {
         this.$store.dispatch('updateCartToDb', { uid: this.user.uid, newCart: this.cart })
       } else {

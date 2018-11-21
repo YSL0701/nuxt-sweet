@@ -30,11 +30,16 @@ export default {
     },
     emailLogin({ commit }, payload) {
       return new Promise((resolve, reject) => {
-        auth.signInWithEmailAndPassword(payload.email, payload.password).then(user => {
-          commit('setUser', user)
-          commit('loginStatus', true)
-          resolve(user.user)
-        })
+        auth
+          .signInWithEmailAndPassword(payload.email, payload.password)
+          .then(user => {
+            commit('setUser', user)
+            commit('loginStatus', true)
+            resolve(user.user)
+          })
+          .catch(err => {
+            reject()
+          })
       })
     },
     googleLogin({ commit }, payload) {
@@ -56,6 +61,7 @@ export default {
             var errorMessage = error.message
             var email = error.email
             var credential = error.credential
+            reject()
           })
       })
     },
@@ -86,6 +92,7 @@ export default {
             var errorMessage = error.message
             var email = error.email
             var credential = error.credential
+            reject()
           })
       })
     },
@@ -108,6 +115,7 @@ export default {
             var errorMessage = error.message
             var email = error.email
             var credential = error.credential
+            reject()
           })
       })
     },

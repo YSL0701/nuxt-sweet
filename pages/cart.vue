@@ -43,7 +43,11 @@ export default {
       return subtotal
     },
     total() {
-      return this.cartSubtotal + 300
+      if (this.cartSubtotal > 0) {
+        return this.cartSubtotal + 300
+      } else {
+        return 0
+      }
     }
   },
   components: {

@@ -4,7 +4,9 @@ export default {
   },
   mutations: {
     addMessage(state, payload) {
-      state.messages.unshift(payload)
+      if (state.messages.every(msg => msg.id !== payload.id)) {
+        state.messages.unshift(payload)
+      }
     },
     removeMessage(state) {
       state.messages.pop()
