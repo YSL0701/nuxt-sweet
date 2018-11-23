@@ -6,8 +6,8 @@
         <div class="menu-line"></div>
         <div class="menu-line"></div>
       </div>
-      <img src="~/static/image/logo-all-dark.svg" alt="" class="desktop-logo">
-      <img src="~/static/image/logotype-sm-dark.svg" alt="" class="mobile-logo">
+      <img src="~/static/image/logo-all-dark.svg" alt="" class="desktop-logo" @click="goToHome">
+      <img src="~/static/image/logotype-sm-dark.svg" alt="" class="mobile-logo" @click="goToHome">
       <ul>
         <li>
           <nuxt-link to="/" class="nuxtLink">首頁</nuxt-link>
@@ -60,6 +60,9 @@ export default {
       } else {
         this.$store.commit('localDataToCart')
       }
+    },
+    goToHome() {
+      this.$router.push('/')
     }
   },
   computed: {
@@ -122,6 +125,9 @@ header {
         height: 2px;
         background-color: $primary;
       }
+    }
+    > img {
+      cursor: pointer;
     }
     > .desktop-logo {
       width: 220px;

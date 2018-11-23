@@ -20,11 +20,13 @@ export default {
   props: ['cartProduct', 'index'],
   methods: {
     qtyModify(modify) {
-      this.$store.commit('qtyModify', { index: this.index, modify })
-      if (this.isLogin) {
-        this.$store.dispatch('updateCartToDb', { uid: this.user.uid, newCart: this.cart })
-      } else {
-        this.$store.commit('saveCartToLocal')
+      if (this.cartProduct.qty + modify > 0) {
+        this.$store.commit('qtyModify', { index: this.index, modify })
+        if (this.isLogin) {
+          this.$store.dispatch('updateCartToDb', { uid: this.user.uid, newCart: this.cart })
+        } else {
+          this.$store.commit('saveCartToLocal')
+        }
       }
     },
     removeCartProduct() {

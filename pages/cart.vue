@@ -22,7 +22,7 @@
           <div>NT$ {{ total }}</div>
         </div>
       </div>
-      <div class="checkout">結帳</div>
+      <div class="checkout" @click="checkout">結帳</div>
     </div>
   </div>
 </template>
@@ -31,6 +31,13 @@
 import cartProductCard from '~/components/cartProductCard.vue'
 
 export default {
+  methods: {
+    checkout() {
+      if (this.cartContent.length > 0 && this.isLogin) {
+        this.$router.push('/checkout')
+      }
+    }
+  },
   computed: {
     cartContent() {
       return this.$store.state.cart.cart
@@ -48,6 +55,9 @@ export default {
       } else {
         return 0
       }
+    },
+    isLogin() {
+      return this.$store.state.auth.isLogin
     }
   },
   components: {

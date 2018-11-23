@@ -36,7 +36,7 @@
     </div>
     <!-- 選單類別商品預覽 -->
     <div class="product-preview">
-      <productCard v-for="item in products" :product="item" :key="item.id" />
+      <productCard v-for="item in currentProducts" :product="item" :key="item.id" />
     </div>
   </div>
 </template>
@@ -62,9 +62,9 @@ export default {
       }
     }
   },
-  watch: {
-    currentCategory() {
-      this.products = this.$store.state.product.allProducts.filter((product, index) => index < 3 && product.category === this.currentCategory)
+  computed: {
+    currentProducts() {
+      return (this.products = this.$store.state.product.allProducts.filter(product => product.category === this.currentCategory))
     }
   },
   components: {
