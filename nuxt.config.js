@@ -4,8 +4,8 @@ module.exports = {
   mode: 'universal',
 
   /*
-  ** Headers of the page
-  */
+   ** Headers of the page
+   */
   head: {
     title: pkg.name,
     meta: [
@@ -27,32 +27,32 @@ module.exports = {
   },
 
   /*
-  ** Customize the progress-bar color
-  */
+   ** Customize the progress-bar color
+   */
   loading: { color: '#fff' },
 
   /*
-  ** Global CSS
-  */
+   ** Global CSS
+   */
   css: ['~/assets/css/reset.css', '~/assets/css/body.css'],
 
   /*
-  ** Plugins to load before mounting the App
-  */
+   ** Plugins to load before mounting the App
+   */
   plugins: ['~/plugins/VeeValidate.js'],
 
   /*
-  ** Nuxt.js modules
-  */
+   ** Nuxt.js modules
+   */
   modules: ['cookie-universal-nuxt'],
 
   /*
-  ** Build configuration
-  */
+   ** Build configuration
+   */
   build: {
     /*
-    ** You can extend webpack config here
-    */
+     ** You can extend webpack config here
+     */
     styleResources: {
       scss: './assets/scss/all.scss'
     },
@@ -62,5 +62,23 @@ module.exports = {
   env: {
     BASE_URL: process.env.NODE_ENV === 'production' ? 'https://sweetaste.herokuapp.com/' : 'http://localhost:3000',
     PRODUCT_API: 'https://vue-course-api.hexschool.io/api/sweetaste'
+  },
+  router: {
+    scrollBehavior: function(to, from, savedPosition) {
+      var position = { x: 0, y: 0 }
+      if (from.name === 'product' || from.name === 'product-category') {
+        if (to.name === 'product' || to.name === 'product-category') {
+          var width = window.innerWidth
+          if (width < 768) {
+            position = { x: 0, y: 600 }
+          } else if (width > 991) {
+            position = { x: 0, y: 500 }
+          } else {
+            position = { x: 0, y: 800 }
+          }
+        }
+      }
+      return position
+    }
   }
 }
