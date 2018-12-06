@@ -19,37 +19,43 @@
     </div>
     <div class="list">
       <div class="title">購物清單</div>
-      <orderProductCard v-for="product in cartContent" :product="product" :key="product.id" />
+      <div class="productList">
+        <orderProductCard
+          v-for="product in cartContent"
+          :product="product"
+          :key="product.id"
+        />
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import orderProductCard from '~/components/orderProductCard.vue'
+import orderProductCard from "~/components/orderProductCard.vue";
 export default {
   computed: {
     cartContent() {
-      return this.$store.state.cart.cart
+      return this.$store.state.cart.cart;
     },
     cartSubtotal() {
-      var subtotal = 0
+      var subtotal = 0;
       this.$store.state.cart.cart.forEach(cartProduct => {
-        subtotal = subtotal + cartProduct.qty * cartProduct.price
-      })
-      return subtotal
+        subtotal = subtotal + cartProduct.qty * cartProduct.price;
+      });
+      return subtotal;
     },
     total() {
       if (this.cartSubtotal > 0) {
-        return this.cartSubtotal + 300
+        return this.cartSubtotal + 300;
       } else {
-        return 0
+        return 0;
       }
     }
   },
   components: {
     orderProductCard
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
@@ -126,6 +132,10 @@ export default {
       color: #8da291;
       background-color: $secondary;
       @include flex(row, center, center);
+    }
+    > .productList {
+      max-height: 300px;
+      overflow-y: auto;
     }
   }
 }

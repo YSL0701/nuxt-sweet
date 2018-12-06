@@ -20,31 +20,83 @@
       <div class="name-area">
         <div class="last-name">
           <div class="text">姓氏</div>
-          <input type="text" placeholder="王" v-model="lastName">
+          <input
+            type="text"
+            placeholder="王"
+            v-model="lastName"
+            @blur="lastNameFocused = true"
+          >
         </div>
         <div class="name">
           <div class="text">名字</div>
-          <input type="text" placeholder="小明" v-model="firstName">
+          <input
+            type="text"
+            placeholder="小明"
+            v-model="firstName"
+            @blur="firstNameFocused = true"
+          >
         </div>
       </div>
+      <validateText
+        class="validate"
+        text="請輸入姓氏和名字"
+        v-show="lastNameFocused && firstNameFocused && !fullNameValidate"
+      />
       <div class="tel">
-        <div class="text">電話</div>
-        <input type="tel" placeholder="0912-345-678" v-model="tel">
+        <div class="text">手機</div>
+        <input
+          type="tel"
+          placeholder="0912345678"
+          v-model="tel"
+          @blur="telFocused = true"
+        >
       </div>
+      <validateText
+        class="validate"
+        text="請輸入正確的手機號碼"
+        v-show="telFocused && !telValidate"
+      />
       <div class="address">
         <div class="text">地址</div>
         <div class="input-area">
-          <input type="text" class="city" placeholder="高雄市" v-model="city">
-          <input type="text" class="district" placeholder="新興區" v-model="district">
-          <input type="text" class="detail" placeholder="幸福路 520 號" v-model="detail">
+          <input
+            type="text"
+            class="city"
+            placeholder="高雄市"
+            v-model="city"
+            @blur="cityFocused = true"
+          >
+          <input
+            type="text"
+            class="district"
+            placeholder="新興區"
+            v-model="district"
+            @blur="districtFocused = true"
+          >
+          <input
+            type="text"
+            class="detail"
+            placeholder="幸福路 520 號"
+            v-model="detail"
+            @blur="detailFocused = true"
+          >
         </div>
       </div>
+      <validateText
+        class="validate"
+        text="請輸入完整地址"
+        v-show="cityFocused && districtFocused && detailFocused && !addressValidate"
+      />
     </div>
-    <div class="next" @click="next">下一步</div>
+    <div
+      class="next"
+      @click="next"
+    >下一步</div>
   </div>
 </template>
 
 <script>
+import validateText from '~/components/validateText.vue'
 export default {
   data() {
     return {
@@ -53,17 +105,73 @@ export default {
       tel: null,
       city: '',
       district: '',
-      detail: ''
+      detail: '',
+      lastNameFocused: false,
+      firstNameFocused: false,
+      telFocused: false,
+      cityFocused: false,
+      districtFocused: false,
+      detailFocused: false
     }
   },
   methods: {
     next() {
-      this.$router.push('/checkout/payment')
+      if (this.fullNameValidate && this.addressValidate && this.telValidate) {
+        var data = {
+          lastName: this.lastName,
+          firstName: this.firstName,
+          tel: this.tel,
+          city: this.city,
+          district: this.district,
+          detail: this.detail
+        }
+        this.$store.commit('addRecipientInfo',data )
+        this.$store.dispatch('updateOrderToDb',{uid:this.user.uid,orderData:this.orderData}).then(()=>{
+          this.$router.push('/checkout/payment')
+        })
+      } else {
+        this.lastNameFocused = true
+        this.firstNameFocused = true
+        this.telFocused = true
+        this.cityFocused = true
+        this.districtFocused = true
+        this.detailFocused = true
+      }
     }
   },
   computed: {
+    fullNameValidate() {
+      return this.lastName.length && this.firstName.length
+    },
     address() {
       return this.city + this.district + this.detail
+    },
+    addressValidate() {
+      return this.city.length && this.district.length && this.detail.length
+    },
+    telValidate() {
+      var cellphoneNumRule = /^09[0-9]{8}$/
+      return cellphoneNumRule.test(this.tel)
+    },
+    user() {
+      return this.$store.state.auth.user
+    },
+    orderData(){
+      return this.$store.state.order
+    }
+  },
+  components: {
+    validateText
+  },
+  created(){
+    if(this.$store.state.order.recipientInfo){
+      var {lastName,firstName,tel,city,district,detail} = this.$store.state.order.recipientInfo
+      this.lastName = lastName
+      this.firstName = firstName
+      this.tel = tel
+      this.city = city
+      this.district = district
+      this.detail = detail
     }
   }
 }
@@ -259,6 +367,11 @@ export default {
           margin-top: 8px;
         }
       }
+    }
+    > .validate {
+      margin-top: 10px;
+      margin-bottom: -10px;
+      align-self: flex-start;
     }
   }
   > .next {

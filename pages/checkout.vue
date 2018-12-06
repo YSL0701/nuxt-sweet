@@ -6,12 +6,18 @@
 </template>
 
 <script>
-import order from '~/components/order.vue'
+import order from "~/components/order.vue";
 export default {
   components: {
     order
-  }
-}
+  },
+  head(){
+    return {
+      title:'結帳'
+    }
+  },
+  middleware: "loginCheck"
+};
 </script>
 
 <style lang="scss" scoped>

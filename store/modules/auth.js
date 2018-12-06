@@ -140,7 +140,8 @@ export default {
                 .doc(payload.uid)
                 .set({
                   uid: payload.uid,
-                  cart: []
+                  cart: [],
+                  order: []
                 })
             }
             resolve()

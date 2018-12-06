@@ -3,38 +3,88 @@
     <div class="login-area">
       <div class="title">會員登入</div>
       <div class="mobile-other-account">
-        <div @click="fbLogin"><img src="~/static/image/ic-facebook-logotype.svg" alt="" class="facebook"></div>
-        <div @click="googleLogin" class="google-area"><img src="~/static/image/ic-google.svg" alt="" class="google"></div>
-        <div @click="twitterLogin" class="twitter">Twitter</div>
+        <div @click="fbLogin"><img
+            src="~/static/image/ic-facebook-logotype.svg"
+            alt=""
+            class="facebook"
+          ></div>
+        <div
+          @click="googleLogin"
+          class="google-area"
+        ><img
+            src="~/static/image/ic-google.svg"
+            alt=""
+            class="google"
+          ></div>
+        <div
+          @click="twitterLogin"
+          class="twitter"
+        >Twitter</div>
       </div>
       <div class="login-info">
         <div class="account">
           <div class="account-icon"><i class="material-icons">assignment_ind</i></div>
-          <input type="email" placeholder="電子信箱" v-model="email">
+          <input
+            type="email"
+            placeholder="電子信箱"
+            v-model="email"
+          >
         </div>
         <div class="password">
           <div class="password-icon"><i class="material-icons">vpn_key</i></div>
-          <input type="password" placeholder="請輸入使用者密碼" v-model="password">
+          <input
+            type="password"
+            placeholder="請輸入使用者密碼"
+            v-model="password"
+          >
         </div>
-        <label for="remember" class="remember">
-          <input type="checkbox" id="remember" class="checkbox">
+        <label
+          for="remember"
+          class="remember"
+        >
+          <input
+            type="checkbox"
+            id="remember"
+            class="checkbox"
+          >
           <span class="ischeck"><i class="material-icons">check_box</i></span>
           <span class="uncheck"><i class="material-icons">check_box_outline_blank</i></span>
           記住我
         </label>
-        <nuxt-link to="/registered" class="registered">
+        <nuxt-link
+          to="/registered"
+          class="registered"
+        >
           <div class="triangle"></div>
           <span>註冊新帳號</span>
         </nuxt-link>
       </div>
-      <div class="login" @click="emailLogin">登入帳號</div>
+      <div
+        class="login"
+        @click="emailLogin"
+      >登入帳號</div>
     </div>
     <div class="other-account">
       <div class="title">—— 連結社群帳號 ——</div>
       <div class="other-account-icon">
-        <div class="facebook" @click="fbLogin"><img src="~/static/image/ic-facebook-logotype.svg" alt=""></div>
-        <div class="google" @click="googleLogin"><img src="~/static/image/ic-google.svg" alt=""></div>
-        <div class="twitter" @click="twitterLogin">Twitter</div>
+        <div
+          class="facebook"
+          @click="fbLogin"
+        ><img
+            src="~/static/image/ic-facebook-logotype.svg"
+            alt=""
+          ></div>
+        <div
+          class="google"
+          @click="googleLogin"
+        ><img
+            src="~/static/image/ic-google.svg"
+            alt=""
+          ></div>
+        <div
+          class="twitter"
+          @click="twitterLogin"
+        >Twitter</div>
       </div>
     </div>
   </div>
@@ -44,85 +94,91 @@
 export default {
   data() {
     return {
-      email: '',
-      password: ''
-    }
+      email: "",
+      password: ""
+    };
   },
   methods: {
     emailLogin() {
-      this.$store.commit('loadingStatus', true)
+      this.$store.commit("loadingStatus", true);
       this.$store
-        .dispatch('emailLogin', { email: this.email, password: this.password })
+        .dispatch("emailLogin", { email: this.email, password: this.password })
         .then(user => {
-          this.setLoginCookie(user.uid)
-          this.$store.commit('loadingStatus', false)
-          this.loginMessage(true)
+          this.setLoginCookie(user.uid);
+          this.$store.commit("loadingStatus", false);
+          this.loginMessage(true);
         })
         .catch(err => {
-          this.$store.commit('loadingStatus', false)
-          this.loginMessage(false)
-        })
+          this.$store.commit("loadingStatus", false);
+          this.loginMessage(false);
+        });
     },
     googleLogin() {
-      this.$store.commit('loadingStatus', true)
+      this.$store.commit("loadingStatus", true);
       this.$store
-        .dispatch('googleLogin')
+        .dispatch("googleLogin")
         .then(user => {
-          this.$store.dispatch('setUserToDb', user).then(() => {
-            this.setLoginCookie(user.uid)
-            this.$store.commit('loadingStatus', false)
-            this.loginMessage(true)
-          })
+          this.$store.dispatch("setUserToDb", user).then(() => {
+            this.setLoginCookie(user.uid);
+            this.$store.commit("loadingStatus", false);
+            this.loginMessage(true);
+          });
         })
         .catch(err => {
-          this.$store.commit('loadingStatus', false)
-          this.loginMessage(false)
-        })
+          this.$store.commit("loadingStatus", false);
+          this.loginMessage(false);
+        });
     },
     fbLogin() {
-      this.$store.commit('loadingStatus', true)
+      this.$store.commit("loadingStatus", true);
       this.$store
-        .dispatch('fbLogin')
+        .dispatch("fbLogin")
         .then(user => {
-          this.$store.dispatch('setUserToDb', user).then(() => {
-            this.setLoginCookie(user.uid)
-            this.$store.commit('loadingStatus', false)
-            this.loginMessage(true)
-          })
+          this.$store.dispatch("setUserToDb", user).then(() => {
+            this.setLoginCookie(user.uid);
+            this.$store.commit("loadingStatus", false);
+            this.loginMessage(true);
+          });
         })
         .catch(err => {
-          this.$store.commit('loadingStatus', false)
-          this.loginMessage(false)
-        })
+          this.$store.commit("loadingStatus", false);
+          this.loginMessage(false);
+        });
     },
     twitterLogin() {
-      this.$store.commit('loadingStatus', true)
+      this.$store.commit("loadingStatus", true);
       this.$store
-        .dispatch('twitterLogin')
+        .dispatch("twitterLogin")
         .then(user => {
-          this.$store.dispatch('setUserToDb', user).then(() => {
-            this.setLoginCookie(user.uid)
-            this.$store.commit('loadingStatus', false)
-            this.loginMessage(true)
-          })
+          this.$store.dispatch("setUserToDb", user).then(() => {
+            this.setLoginCookie(user.uid);
+            this.$store.commit("loadingStatus", false);
+            this.loginMessage(true);
+          });
         })
         .catch(err => {
-          this.$store.commit('loadingStatus', false)
-          this.loginMessage(false)
-        })
+          this.$store.commit("loadingStatus", false);
+          this.loginMessage(false);
+        });
     },
     setLoginCookie(uid) {
-      this.$cookies.set('uid', uid, {
-        path: '/',
+      this.$cookies.set("uid", uid, {
+        path: "/",
         // maxAge: 60 * 60 * 24 * 7
-        maxAge: 60 * 60
-      })
+        maxAge: 60 * 60 * 24
+      });
     },
     loginMessage(success) {
       if (success) {
-        this.$store.commit('addMessage', { content: `登入成功，歡迎回來！`, id: 'loginSuccess' })
+        this.$store.commit("addMessage", {
+          content: `登入成功，歡迎回來！`,
+          id: "loginSuccess"
+        });
       } else {
-        this.$store.commit('addMessage', { content: `登入失敗，請檢查登入資訊`, id: 'loginFalse' })
+        this.$store.commit("addMessage", {
+          content: `登入失敗，請檢查登入資訊`,
+          id: "loginFalse"
+        });
       }
     }
   },
@@ -133,20 +189,20 @@ export default {
   //   }
   // },
   watch: {
-    '$store.state.auth.user'() {
+    "$store.state.auth.user"() {
       if (this.$store.state.auth.user) {
-        console.log('router push')
-        this.$router.push('/')
+        console.log("router push");
+        this.$router.push("/");
       }
     }
   },
   head() {
     return {
-      title: '登入'
-    }
+      title: "登入"
+    };
   },
-  middleware: 'authCheck'
-}
+  middleware: "authCheck"
+};
 </script>
 
 <style lang="scss" scoped>

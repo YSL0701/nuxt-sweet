@@ -20,35 +20,154 @@
       <div class="creditCard">
         <div class="text">信用卡卡號</div>
         <div class="card-number">
-          <input type="text" placeholder="9012-3456-7890-1234">
+          <input
+            type="text"
+            placeholder="9012-3456-7890-1234"
+            v-model="cardNumber"
+            @blur="focused.cardNumber = true"
+            @input="addHyphen"
+            maxlength="19"
+          >
           <div class="card-icon">
             <i class="material-icons">credit_card</i>
           </div>
         </div>
       </div>
+      <validateText
+        class="validate"
+        text="請輸入正確格式的信用卡號"
+        v-show="focused.cardNumber && !cardNumberValidate"
+      />
       <div class="cardholder-name">
         <div class="text">持卡人姓名</div>
         <div class="input-area">
-          <input type="text" placeholder="王">
-          <input type="text" placeholder="小明"></div>
+          <input
+            type="text"
+            placeholder="王"
+            v-model="lastName"
+            @blur="focused.lastName =true"
+          >
+          <input
+            type="text"
+            placeholder="小明"
+            v-model="firstName"
+            @blur="focused.firstName = true"
+          ></div>
       </div>
+      <validateText
+        class="validate"
+        text="請輸入持卡人姓名"
+        v-show="focused.firstName && focused.lastName && !fullNameValidate"
+      />
       <div class="expiration-date">
         <div class="text">有效期限</div>
         <div class="input-area">
-          <input type="text" placeholder="月">
-          <input type="text" placeholder="年"></div>
+          <input
+            type="text"
+            placeholder="月"
+            v-model="expirationDate.month"
+            @blur="focused.expirationDate.month = true"
+            maxlength="2"
+          >
+          <input
+            type="text"
+            placeholder="年"
+            v-model="expirationDate.year"
+            @blur="focused.expirationDate.year = true"
+            maxlength="2"
+          ></div>
       </div>
+      <validateText
+        class="validate"
+        text="請輸入正確的有效期限"
+        v-show="focused.expirationDate.month && focused.expirationDate.year && !expirationDateValidate"
+      />
       <div class="security-code">
         <div class="text">背面末三碼</div>
-        <input type="text" placeholder="123">
+        <input
+          type="text"
+          placeholder="123"
+          v-model="securityCode"
+          @blur="focused.securityCode = true"
+          maxlength="3"
+        >
       </div>
+      <validateText
+        class="validate"
+        text="請輸入背面末三碼"
+        v-show="focused.securityCode && !securityCodeValidate"
+      />
     </div>
-    <div class="next" onclick="location.href='./checkout-3-1.html'">下一步</div>
+    <div
+      class="next"
+      onclick="location.href='./checkout-3-1.html'"
+    >下一步</div>
   </div>
 </template>
 
 <script>
-export default {}
+import validateText from '~/components/validateText.vue'
+export default {
+  data(){
+    return{
+      cardNumber:'',
+      lastName: '',
+      firstName: '',
+      expirationDate:{
+        month:null,
+        year:null
+      },
+      securityCode:'',
+      focused:{
+        cardNumber:false,
+        lastName:false,
+        firstName:false,
+        expirationDate:{
+          month:false,
+          year:false
+        },
+        securityCode:false
+      }
+    }
+  },
+  methods:{
+    addHyphen(){
+      this.cardNumber = this.cardNumber.replace(/(\d{4})(?=\d)/g, "$1-")
+    },
+    next(){
+      if(this.cardNumberValidate && this.fullNameValidate && this.expirationDateValidate && this.securityCodeValidate){
+        this.$store.commit('addPaymentInfo',{
+          cardNumber:this.cardNumber,
+          lastName:this.lastName,
+          firstName:this.firstName,
+          expirationDate:this.expirationDate,
+          securityCode:this.securityCode
+        })
+      }
+    }
+  },
+  computed:{
+    pureCardNumber(){
+      return this.cardNumber.split('-').join('') * 1
+    },
+    cardNumberValidate(){
+      var cardNumberRule = /^\d{4}-\d{4}-\d{4}-\d{4}$/
+      return cardNumberRule.test(this.cardNumber)
+    },
+    fullNameValidate() {
+      return this.lastName.length && this.firstName.length
+    },
+    expirationDateValidate(){
+      return this.expirationDate.month > 0 && this.expirationDate.month<13 && this.expirationDate.year.length === 2
+    },
+    securityCodeValidate(){
+      return this.securityCode.length === 3
+    }
+  },
+  components:{
+    validateText
+  }
+}
 </script>
 
 <style lang="scss" scoped>
@@ -234,6 +353,11 @@ export default {}
           width: calc(50% - 4.5px);
         }
       }
+    }
+    > .validate {
+      margin-top: 10px;
+      margin-bottom: -10px;
+      align-self: flex-start;
     }
   }
   > .next {
