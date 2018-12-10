@@ -125,9 +125,11 @@ export default {
           district: this.district,
           detail: this.detail
         }
+        this.$store.commit('loadingStatus',true)
         this.$store.commit('addRecipientInfo',data )
-        this.$store.dispatch('updateOrderToDb',{uid:this.user.uid,orderData:this.orderData}).then(()=>{
+        this.$store.dispatch('updateUnfinishedOrderToDb',{uid:this.user.uid,orderData:this.orderData}).then(()=>{
           this.$router.push('/checkout/payment')
+          this.$store.commit('loadingStatus',false)
         })
       } else {
         this.lastNameFocused = true
@@ -137,17 +139,26 @@ export default {
         this.districtFocused = true
         this.detailFocused = true
       }
+    },
+    getStateData(){
+      var { lastName,firstName,tel,city,district,detail } = this.$store.state.order.recipientInfo
+      this.lastName = lastName
+      this.firstName = firstName
+      this.tel = tel
+      this.city = city
+      this.district = district
+      this.detail = detail
     }
   },
   computed: {
     fullNameValidate() {
-      return this.lastName.length && this.firstName.length
+      return this.lastName && this.firstName
     },
     address() {
       return this.city + this.district + this.detail
     },
     addressValidate() {
-      return this.city.length && this.district.length && this.detail.length
+      return this.city && this.district && this.detail
     },
     telValidate() {
       var cellphoneNumRule = /^09[0-9]{8}$/
@@ -164,14 +175,15 @@ export default {
     validateText
   },
   created(){
-    if(this.$store.state.order.recipientInfo){
-      var {lastName,firstName,tel,city,district,detail} = this.$store.state.order.recipientInfo
-      this.lastName = lastName
-      this.firstName = firstName
-      this.tel = tel
-      this.city = city
-      this.district = district
-      this.detail = detail
+    if(this.$store.state.order.recipientInfo.lastName){
+      this.getStateData()
+    }else{
+      var uid = this.$cookies.get('uid')
+      this.$store.dispatch('getUnfinishedOrder',uid).then(()=>{
+        if(this.$store.state.order.recipientInfo.lastName){
+          this.getStateData()
+        }
+      })
     }
   }
 }

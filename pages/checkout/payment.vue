@@ -4,7 +4,11 @@
       <div class="title">
         <div class="text">付款</div>
         <div class="step">
-          <div class="checked">
+          <div
+            class="checked"
+            title="運送"
+            @click="$router.push('/checkout/recipientInfo')"
+          >
             <i class="material-icons">check_circle</i>
           </div>
           <span class="passed"></span>
@@ -100,7 +104,7 @@
     </div>
     <div
       class="next"
-      onclick="location.href='./checkout-3-1.html'"
+      @click="next"
     >下一步</div>
   </div>
 </template>
@@ -114,8 +118,8 @@ export default {
       lastName: '',
       firstName: '',
       expirationDate:{
-        month:null,
-        year:null
+        month:'',
+        year:''
       },
       securityCode:'',
       focused:{
@@ -136,6 +140,7 @@ export default {
     },
     next(){
       if(this.cardNumberValidate && this.fullNameValidate && this.expirationDateValidate && this.securityCodeValidate){
+        this.$store.commit('loadingStatus',true)
         this.$store.commit('addPaymentInfo',{
           cardNumber:this.cardNumber,
           lastName:this.lastName,
@@ -143,7 +148,26 @@ export default {
           expirationDate:this.expirationDate,
           securityCode:this.securityCode
         })
+        this.$store.dispatch('updateUnfinishedOrderToDb',{uid:this.user.uid,orderData:this.orderData}).then(()=>{
+          this.$router.push('/checkout/receipt')
+          this.$store.commit('loadingStatus',false)
+        })
+      }else{
+        this.focused.cardNumber = true
+        this.focused.lastName = true
+        this.focused.firstName = true
+        this.focused.expirationDate.month = true
+        this.focused.expirationDate.year = true
+        this.focused.securityCode = true
       }
+    },
+    getStateData(){
+      var { cardNumber,lastName,firstName,expirationDate,securityCode } = this.$store.state.order.paymentInfo
+      this.cardNumber = cardNumber
+      this.lastName = lastName
+      this.firstName = firstName
+      this.expirationDate = expirationDate
+      this.securityCode = securityCode
     }
   },
   computed:{
@@ -155,17 +179,35 @@ export default {
       return cardNumberRule.test(this.cardNumber)
     },
     fullNameValidate() {
-      return this.lastName.length && this.firstName.length
+      return this.lastName && this.firstName
     },
     expirationDateValidate(){
       return this.expirationDate.month > 0 && this.expirationDate.month<13 && this.expirationDate.year.length === 2
     },
     securityCodeValidate(){
       return this.securityCode.length === 3
+    },
+    user() {
+      return this.$store.state.auth.user
+    },
+    orderData(){
+      return this.$store.state.order
     }
   },
   components:{
     validateText
+  },
+  created(){
+    if(this.$store.state.order.paymentInfo.cardNumber){
+      this.getStateData()
+    }else{
+      var uid = this.$cookies.get('uid')
+      this.$store.dispatch('getUnfinishedOrder',uid).then(()=>{
+        if(this.$store.state.order.paymentInfo.cardNumber){
+          this.getStateData()
+        }
+      })
+    }
   }
 }
 </script>
@@ -213,6 +255,7 @@ export default {
           margin-right: -2px;
           margin-left: -2px;
           color: $secondary;
+          cursor: pointer;
         }
         > span {
           width: 66px;
