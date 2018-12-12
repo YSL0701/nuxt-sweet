@@ -49,6 +49,7 @@
           placeholder="0912345678"
           v-model="tel"
           @blur="telFocused = true"
+          maxlength="10"
         >
       </div>
       <validateText
@@ -125,11 +126,11 @@ export default {
           district: this.district,
           detail: this.detail
         }
-        this.$store.commit('loadingStatus',true)
-        this.$store.commit('addRecipientInfo',data )
-        this.$store.dispatch('updateUnfinishedOrderToDb',{uid:this.user.uid,orderData:this.orderData}).then(()=>{
+        this.$store.commit('loadingStatus', true)
+        this.$store.commit('addRecipientInfo', data)
+        this.$store.dispatch('updateUnfinishedOrderToDb', { uid: this.user.uid, orderData: this.orderData }).then(() => {
           this.$router.push('/checkout/payment')
-          this.$store.commit('loadingStatus',false)
+          this.$store.commit('loadingStatus', false)
         })
       } else {
         this.lastNameFocused = true
@@ -140,8 +141,8 @@ export default {
         this.detailFocused = true
       }
     },
-    getStateData(){
-      var { lastName,firstName,tel,city,district,detail } = this.$store.state.order.recipientInfo
+    getStateData() {
+      var { lastName, firstName, tel, city, district, detail } = this.$store.state.order.recipientInfo
       this.lastName = lastName
       this.firstName = firstName
       this.tel = tel
@@ -158,7 +159,7 @@ export default {
       return this.city + this.district + this.detail
     },
     addressValidate() {
-      return this.city && this.district && this.detail
+      return this.city.length > 0 && this.district.length > 0 && this.detail.length > 0
     },
     telValidate() {
       var cellphoneNumRule = /^09[0-9]{8}$/
@@ -167,20 +168,20 @@ export default {
     user() {
       return this.$store.state.auth.user
     },
-    orderData(){
+    orderData() {
       return this.$store.state.order
     }
   },
   components: {
     validateText
   },
-  created(){
-    if(this.$store.state.order.recipientInfo.lastName){
+  created() {
+    if (this.$store.state.order.recipientInfo.lastName) {
       this.getStateData()
-    }else{
+    } else {
       var uid = this.$cookies.get('uid')
-      this.$store.dispatch('getUnfinishedOrder',uid).then(()=>{
-        if(this.$store.state.order.recipientInfo.lastName){
+      this.$store.dispatch('getUnfinishedOrder', uid).then(() => {
+        if (this.$store.state.order.recipientInfo.lastName) {
           this.getStateData()
         }
       })

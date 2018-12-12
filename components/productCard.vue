@@ -1,6 +1,9 @@
 <template>
   <div class="product-card">
-    <div class="product-image" :style="{backgroundImage: `url(${product.imageUrl})`}">
+    <div
+      class="product-image"
+      :style="{backgroundImage: `url(${product.imageUrl})`}"
+    >
       <div class="product-tag">
         <div class="tag-text">{{product.category}}</div>
       </div>
@@ -12,8 +15,18 @@
       <div class="product-name">{{product.title}}</div>
       <div class="price">NT$ {{product.price}}</div>
     </div>
-    <div class="add-to-cart" @click="addToCart" v-if="!cardLoading">加入購物車</div>
-    <div class="loading" v-else><img src="/image/Rolling-1s-200px.svg" alt="loading"></div>
+    <div
+      class="add-to-cart"
+      @click="addToCart"
+      v-if="!cardLoading"
+    >加入購物車</div>
+    <div
+      class="loading"
+      v-else
+    ><img
+        src="/image/Rolling-1s-200px.svg"
+        alt="loading"
+      ></div>
   </div>
 </template>
 

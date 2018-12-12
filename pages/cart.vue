@@ -36,49 +36,51 @@
 </template>
 
 <script>
-import cartProductCard from "~/components/cartProductCard.vue";
+import cartProductCard from '~/components/cartProductCard.vue'
 
 export default {
   methods: {
     checkout() {
       if (this.cartContent.length > 0 && this.isLogin) {
-        this.$router.push("/checkout/recipientInfo");
+        this.$router.push('/checkout/recipientInfo')
       } else if (this.cartContent.length > 0 && !this.isLogin) {
-        this.$router.push("/login");
+        this.$router.push('/login')
       }
     }
   },
   computed: {
     cartContent() {
-      return this.$store.state.cart.cart;
+      return this.$store.state.cart.cart
     },
     cartSubtotal() {
-      var subtotal = 0;
-      this.$store.state.cart.cart.forEach(cartProduct => {
-        subtotal = subtotal + cartProduct.qty * cartProduct.price;
-      });
-      return subtotal;
+      var subtotal = 0
+      if (this.$store.state.cart.cart.length > 0) {
+        this.$store.state.cart.cart.forEach(cartProduct => {
+          subtotal = subtotal + cartProduct.qty * cartProduct.price
+        })
+      }
+      return subtotal
     },
     total() {
       if (this.cartSubtotal > 0) {
-        return this.cartSubtotal + 300;
+        return this.cartSubtotal + 300
       } else {
-        return 0;
+        return 0
       }
     },
     isLogin() {
-      return this.$store.state.auth.isLogin;
+      return this.$store.state.auth.isLogin
     }
   },
   components: {
     cartProductCard
   },
-  head(){
+  head() {
     return {
-      title:'購物車'
+      title: '購物車'
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

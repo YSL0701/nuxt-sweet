@@ -141,7 +141,8 @@ export default {
                 .set({
                   uid: payload.uid,
                   cart: [],
-                  order: []
+                  order: [],
+                  order_unfinished: {}
                 })
             }
             resolve()

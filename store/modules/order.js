@@ -8,24 +8,27 @@ export default {
   },
   mutations: {
     addRecipientInfo(state, payload) {
-      state.recipientInfo = payload
+      if (payload) {
+        state.recipientInfo = payload
+      }
     },
     addPaymentInfo(state, payload) {
-      state.paymentInfo = payload
+      if (payload) {
+        state.paymentInfo = payload
+      }
     },
-    addreceiptInfo(state, payload) {
-      state.receiptInfo = payload
+    addReceiptInfo(state, payload) {
+      if (payload) {
+        state.receiptInfo = payload
+      }
+    },
+    clearOrderInfo(state) {
+      state.recipientInfo = {}
+      state.paymentInfo = {}
+      state.receiptInfo = {}
     }
   },
   actions: {
-    updateOrderToDb({ commit }, { uid, orderData }) {
-      return db
-        .collection('users')
-        .doc(uid)
-        .update({
-          order: orderData
-        })
-    },
     updateUnfinishedOrderToDb({ commit }, { uid, orderData }) {
       return db
         .collection('users')
@@ -47,6 +50,14 @@ export default {
             resolve()
           })
       })
+    },
+    createOrder({ commit }, finalOrderData) {
+      return db
+        .collection('users')
+        .doc(finalOrderData.uid)
+        .update({
+          order: firebase.firestore.FieldValue.arrayUnion(finalOrderData)
+        })
     }
   }
 }

@@ -112,47 +112,47 @@
 <script>
 import validateText from '~/components/validateText.vue'
 export default {
-  data(){
-    return{
-      cardNumber:'',
+  data() {
+    return {
+      cardNumber: '',
       lastName: '',
       firstName: '',
-      expirationDate:{
-        month:'',
-        year:''
+      expirationDate: {
+        month: '',
+        year: ''
       },
-      securityCode:'',
-      focused:{
-        cardNumber:false,
-        lastName:false,
-        firstName:false,
-        expirationDate:{
-          month:false,
-          year:false
+      securityCode: '',
+      focused: {
+        cardNumber: false,
+        lastName: false,
+        firstName: false,
+        expirationDate: {
+          month: false,
+          year: false
         },
-        securityCode:false
+        securityCode: false
       }
     }
   },
-  methods:{
-    addHyphen(){
-      this.cardNumber = this.cardNumber.replace(/(\d{4})(?=\d)/g, "$1-")
+  methods: {
+    addHyphen() {
+      this.cardNumber = this.cardNumber.replace(/(\d{4})(?=\d)/g, '$1-')
     },
-    next(){
-      if(this.cardNumberValidate && this.fullNameValidate && this.expirationDateValidate && this.securityCodeValidate){
-        this.$store.commit('loadingStatus',true)
-        this.$store.commit('addPaymentInfo',{
-          cardNumber:this.cardNumber,
-          lastName:this.lastName,
-          firstName:this.firstName,
-          expirationDate:this.expirationDate,
-          securityCode:this.securityCode
+    next() {
+      if (this.cardNumberValidate && this.fullNameValidate && this.expirationDateValidate && this.securityCodeValidate) {
+        this.$store.commit('loadingStatus', true)
+        this.$store.commit('addPaymentInfo', {
+          cardNumber: this.cardNumber,
+          lastName: this.lastName,
+          firstName: this.firstName,
+          expirationDate: this.expirationDate,
+          securityCode: this.securityCode
         })
-        this.$store.dispatch('updateUnfinishedOrderToDb',{uid:this.user.uid,orderData:this.orderData}).then(()=>{
+        this.$store.dispatch('updateUnfinishedOrderToDb', { uid: this.user.uid, orderData: this.orderData }).then(() => {
           this.$router.push('/checkout/receipt')
-          this.$store.commit('loadingStatus',false)
+          this.$store.commit('loadingStatus', false)
         })
-      }else{
+      } else {
         this.focused.cardNumber = true
         this.focused.lastName = true
         this.focused.firstName = true
@@ -161,8 +161,8 @@ export default {
         this.focused.securityCode = true
       }
     },
-    getStateData(){
-      var { cardNumber,lastName,firstName,expirationDate,securityCode } = this.$store.state.order.paymentInfo
+    getStateData() {
+      var { cardNumber, lastName, firstName, expirationDate, securityCode } = this.$store.state.order.paymentInfo
       this.cardNumber = cardNumber
       this.lastName = lastName
       this.firstName = firstName
@@ -170,40 +170,40 @@ export default {
       this.securityCode = securityCode
     }
   },
-  computed:{
-    pureCardNumber(){
+  computed: {
+    pureCardNumber() {
       return this.cardNumber.split('-').join('') * 1
     },
-    cardNumberValidate(){
+    cardNumberValidate() {
       var cardNumberRule = /^\d{4}-\d{4}-\d{4}-\d{4}$/
       return cardNumberRule.test(this.cardNumber)
     },
     fullNameValidate() {
       return this.lastName && this.firstName
     },
-    expirationDateValidate(){
-      return this.expirationDate.month > 0 && this.expirationDate.month<13 && this.expirationDate.year.length === 2
+    expirationDateValidate() {
+      return this.expirationDate.month > 0 && this.expirationDate.month < 13 && this.expirationDate.year.length === 2
     },
-    securityCodeValidate(){
+    securityCodeValidate() {
       return this.securityCode.length === 3
     },
     user() {
       return this.$store.state.auth.user
     },
-    orderData(){
+    orderData() {
       return this.$store.state.order
     }
   },
-  components:{
+  components: {
     validateText
   },
-  created(){
-    if(this.$store.state.order.paymentInfo.cardNumber){
+  created() {
+    if (this.$store.state.order.paymentInfo.cardNumber) {
       this.getStateData()
-    }else{
+    } else {
       var uid = this.$cookies.get('uid')
-      this.$store.dispatch('getUnfinishedOrder',uid).then(()=>{
-        if(this.$store.state.order.paymentInfo.cardNumber){
+      this.$store.dispatch('getUnfinishedOrder', uid).then(() => {
+        if (this.$store.state.order.paymentInfo.cardNumber) {
           this.getStateData()
         }
       })

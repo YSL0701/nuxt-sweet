@@ -39,6 +39,9 @@ export default {
     removeCartProduct(state, id) {
       var removeIndex = state.cart.findIndex(product => product.id === id)
       state.cart.splice(removeIndex, 1)
+    },
+    clearCart(state) {
+      state.cart = []
     }
   },
   actions: {
