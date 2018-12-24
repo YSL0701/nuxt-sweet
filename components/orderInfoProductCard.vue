@@ -22,10 +22,10 @@ export default {
   margin-top: 16px;
   margin-bottom: 15px;
   @include flex();
-  @include media($tablet) {
+  @include media($mobile) {
     margin-left: auto;
     margin-right: auto;
-    width: 280px;
+    max-width: 280px;
     justify-content: space-between;
   }
   > .product-image {
@@ -49,7 +49,7 @@ export default {
       font-weight: bold;
       height: 28px;
       margin-top: 2px;
-      @include media($tablet) {
+      @include media($mobile) {
         align-self: flex-end;
       }
       @include flex(row, center, center);

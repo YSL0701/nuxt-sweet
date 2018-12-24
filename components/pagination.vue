@@ -2,33 +2,58 @@
   <div class="pagination">
     <ul>
       <li>
-        <a href="javascript:">
+        <div
+          class="link"
+          :class="{disabled:!pagination.has_pre}"
+          @click.prevent="pageChange(pagination.current_page-1,pagination.has_pre)"
+        >
           <div class="prev"><i class="material-icons">arrow_left</i></div>
-        </a>
+        </div>
+      </li>
+      <li
+        v-for="pageNum in pagination.total_pages"
+        :key="pageNum"
+      >
+        <nuxt-link
+          class="link"
+          :to="{path:'/product',query:{page:pageNum}}"
+        >
+          <div
+            class="page"
+            :class="{active:pagination.current_page===pageNum}"
+          >{{ pageNum }}</div>
+        </nuxt-link>
       </li>
       <li>
-        <a href="javascript:">
-          <div class="page active">1</div>
-        </a>
-      </li>
-      <li>
-        <a href="javascript:">
-          <div class="page">2</div>
-        </a>
-      </li>
-      <li>
-        <a href="javascript:">
-          <div class="page">3</div>
-        </a>
-      </li>
-      <li>
-        <a href="javascript:">
+        <div
+          class="link"
+          :class="{disabled:!pagination.has_next}"
+          @click.prevent="pageChange(pagination.current_page+1,pagination.has_next)"
+        >
           <div class="next"><i class="material-icons">arrow_right</i></div>
-        </a>
+        </div>
       </li>
     </ul>
   </div>
 </template>
+
+<script>
+export default {
+  methods: {
+    pageChange(page, has) {
+      if (has) {
+        this.$router.push({ path: '/product', query: { page } })
+      }
+    }
+  },
+  computed: {
+    pagination() {
+      return this.$store.state.product.pagination
+    }
+  }
+}
+</script>
+
 
 <style lang="scss" scoped>
 .pagination {
@@ -48,9 +73,10 @@
     @include flex();
     > li {
       display: inline-block;
-      > a {
+      > .link {
         text-decoration: none;
         display: inline-block;
+        cursor: pointer;
         > div {
           width: 60px;
           height: 60px;
@@ -71,9 +97,9 @@
           background-color: $primary;
           color: $secondary;
         }
-        .disabled {
-          pointer-events: none;
-        }
+      }
+      > .disabled {
+        cursor: default;
       }
     }
   }

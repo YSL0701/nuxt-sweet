@@ -1,6 +1,12 @@
 <template>
   <div class="msg-container">
-    <messageCard class="message" v-for="(item,index) in messages" :message="item.content" :index="index" :key="item.id" />
+    <messageCard
+      class="message"
+      v-for="(item,index) in messages"
+      :message="item.content"
+      :index="index"
+      :key="item.id"
+    />
   </div>
 </template>
 
@@ -23,7 +29,7 @@ export default {
   position: fixed;
   top: 100px;
   right: 30px;
-  z-index: 10;
+  z-index: 5;
   @include flex(column, flex-start, flex-end);
   @include media($mobile) {
     top: 84px;

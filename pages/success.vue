@@ -12,19 +12,19 @@
           src="~/static/image/lg-付款成功.svg"
           alt=""
         ></div>
-      <router-link
+      <nuxt-link
         class="link"
         to="/product"
       >
         <div class="look-product">繼續逛逛</div>
-      </router-link>
+      </nuxt-link>
     </div>
-    <router-link
+    <nuxt-link
       class="mobileLink"
       to="/product"
     >
       <div class="look-product-mobile">繼續逛逛</div>
-    </router-link>
+    </nuxt-link>
   </div>
 </template>
 

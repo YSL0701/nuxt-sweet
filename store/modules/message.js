@@ -13,6 +13,9 @@ export default {
     },
     userRemoveMessage(state, payload) {
       state.messages.splice(payload, 1)
+    },
+    removeAllMessage(state) {
+      state.messages = []
     }
   }
 }

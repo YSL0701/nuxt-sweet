@@ -5,11 +5,19 @@
     <indexMmenu :current-category.sync="currentCategory" />
     <!-- 說明理由區域 -->
     <div class="why-make">
-      <img src="~/static/image/sm-橫式-為什麼選擇了做甜點.svg" alt="為什麼選擇了做甜點" class="mobile-why-make">
+      <img
+        src="~/static/image/sm-橫式-為什麼選擇了做甜點.svg"
+        alt="為什麼選擇了做甜點"
+        class="mobile-why-make"
+      >
       <div class="reason-img"></div>
       <div class="reason">
         <div class="title">
-          <img src="~/static/image/lg-為什麼選擇了做甜點.svg" alt="為什麼選擇了做甜點" class="desktop-why-make">
+          <img
+            src="~/static/image/lg-為什麼選擇了做甜點.svg"
+            alt="為什麼選擇了做甜點"
+            class="desktop-why-make"
+          >
         </div>
         <div class="article">
           <p class="p1">青山依舊在，幾度夕陽紅。慣看秋月春一壺濁酒喜相逢，浪花淘盡英雄。是非轉頭空，滾滾長江東逝水，白髮漁樵江古今多少事，都付笑談中。</p>
@@ -18,10 +26,18 @@
       </div>
     </div>
     <div class="why-eat">
-      <img src="~/static/image/sm-橫式-為什麼一定要吃甜點.svg" alt="為什麼一定要吃甜點" class="mobile-why-eat">
+      <img
+        src="~/static/image/sm-橫式-為什麼一定要吃甜點.svg"
+        alt="為什麼一定要吃甜點"
+        class="mobile-why-eat"
+      >
       <div class="reason">
         <div class="title">
-          <img src="~/static/image/lg-為什麼一定要吃甜點.svg" alt="為什麼一定要吃甜點" class="desktop-why-eat">
+          <img
+            src="~/static/image/lg-為什麼一定要吃甜點.svg"
+            alt="為什麼一定要吃甜點"
+            class="desktop-why-eat"
+          >
         </div>
         <div class="article">
           <p class="p1">青山依舊在，幾度夕陽紅。慣看秋月春一壺濁酒喜相逢，浪花淘盡英雄。是非轉頭空，滾滾長江東逝水，白髮漁樵江古今多少事，都付笑談中。</p>
@@ -31,12 +47,25 @@
       <div class="reason-img"></div>
     </div>
     <div class="no-reason">
-      <img src="~/static/image/lg-想吃甜點是不需要理由的.svg" alt="想吃甜點是不需要理由的" class="desktop-no-reason">
-      <img src="~/static/image/sm-橫式-想吃甜點是不需要理由的.svg" alt="想吃甜點是不需要理由的" class="mobile-no-reason">
+      <img
+        src="~/static/image/lg-想吃甜點是不需要理由的.svg"
+        alt="想吃甜點是不需要理由的"
+        class="desktop-no-reason"
+      >
+      <img
+        src="~/static/image/sm-橫式-想吃甜點是不需要理由的.svg"
+        alt="想吃甜點是不需要理由的"
+        class="mobile-no-reason"
+      >
     </div>
     <!-- 選單類別商品預覽 -->
     <div class="product-preview">
-      <productCard v-for="item in currentProducts" :product="item" :key="item.id" />
+      <productCard
+        v-for="(item,index) in currentProducts"
+        :product="item"
+        :key="item.id"
+        v-if="index<3"
+      />
     </div>
   </div>
 </template>

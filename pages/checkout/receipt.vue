@@ -143,7 +143,7 @@ export default {
   methods: {
     next() {
       if (this.type === 'email') {
-        if (this.emailValidate) {
+        if (this.emailValidate && this.cartContent.length > 0) {
           this.$store.commit('loadingStatus', true)
           this.$store.commit('addReceiptInfo', {
             email: this.email,
@@ -159,7 +159,7 @@ export default {
         } else {
           this.focused.email = true
         }
-      } else if (this.type === 'mail') {
+      } else if (this.type === 'mail' && this.cartContent.length > 0) {
         if (this.addressValidate) {
           this.$store.commit('loadingStatus', true)
           this.$store.commit('addReceiptInfo', {
@@ -210,11 +210,12 @@ export default {
       finalOrderData.date = new Date()
       finalOrderData.orderId = `${this.user.uid.slice(0, 3)}${timestamp}`
       finalOrderData.uid = this.user.uid
-      finalOrderData.isPaid = false
+      finalOrderData.isPaid = true
       finalOrderData.product = this.cartContent
       finalOrderData.subtotal = this.cartSubtotal
       finalOrderData.freight = 300
       finalOrderData.total = this.total
+      finalOrderData.status = '出貨準備中'
       return this.$store
         .dispatch('createOrder', finalOrderData)
         .then(() => {
@@ -281,6 +282,12 @@ export default {
       this.$store.dispatch('getUnfinishedOrder', uid).then(() => {
         if (this.$store.state.order.receiptInfo.receiptType) {
           this.getStateData()
+        }
+        if (!this.$store.state.order.recipientInfo.lastName && !this.$store.state.order.paymentInfo.cardNumber) {
+          this.$router.push('/checkout/recipientInfo')
+        }
+        if (!this.$store.state.order.paymentInfo.cardNumber && this.$store.state.order.recipientInfo.lastName) {
+          this.$router.push('/checkout/payment')
         }
       })
     }

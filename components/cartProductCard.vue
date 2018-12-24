@@ -1,17 +1,29 @@
 <template>
-  <div>
-    <div class="product-image" :style="{backgroundImage: `url(${cartProduct.imageUrl})`}"></div>
+  <div class="card">
+    <div
+      class="product-image"
+      :style="{backgroundImage: `url(${cartProduct.imageUrl})`}"
+    ></div>
     <div class="product-info">
       <div class="name">{{ cartProduct.title }}</div>
       <div class="price">NT$ {{ cartProduct.price }}</div>
     </div>
     <div class="counter">
-      <div class="minus" @click="qtyModify(-1)">-</div>
+      <div
+        class="minus"
+        @click="qtyModify(-1)"
+      >-</div>
       <div class="count">{{ cartProduct.qty }}</div>
-      <div class="add" @click="qtyModify(1)">+</div>
+      <div
+        class="add"
+        @click="qtyModify(1)"
+      >+</div>
     </div>
     <div class="subtotal">NT$ {{ subtotal }}</div>
-    <div class="delete" @click="removeCartProduct"><i class="material-icons">delete_outline</i></div>
+    <div
+      class="delete"
+      @click="removeCartProduct"
+    ><i class="material-icons">delete_outline</i></div>
   </div>
 </template>
 
@@ -56,7 +68,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-div {
+.card {
   margin-top: 33px;
   @include flex(row, space-between, center);
   @include media($mobile) {
@@ -80,6 +92,9 @@ div {
   > .product-info {
     margin-left: 40px;
     height: 53px;
+    @include media($desktop) {
+      width: 100px;
+    }
     @include flex(column, space-around);
     @include media($mobile) {
       margin-left: 16px;

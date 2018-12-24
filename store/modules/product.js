@@ -3,7 +3,8 @@ import axios from 'axios'
 export default {
   state: {
     allProducts: [],
-    productsByPage: []
+    productsByPage: [],
+    pagination: {}
   },
   mutations: {
     setProducts(state, payload) {
@@ -11,6 +12,9 @@ export default {
     },
     setProductsByPage(state, payload) {
       state.productsByPage = payload
+    },
+    setPagination(state, payload) {
+      state.pagination = payload
     }
   },
   actions: {
@@ -26,6 +30,7 @@ export default {
       return new Promise((resolve, reject) => {
         axios.get(`${process.env.PRODUCT_API}/products/?page=${page}`).then(res => {
           commit('setProductsByPage', res.data.products)
+          commit('setPagination', res.data.pagination)
           resolve()
         })
       })

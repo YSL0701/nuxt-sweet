@@ -1,6 +1,10 @@
 <template>
   <div class="product">
-    <productCard v-for="item in products" :product="item" :key="item.id" />
+    <productCard
+      v-for="item in products"
+      :product="item"
+      :key="item.id"
+    />
   </div>
 </template>
 
@@ -9,14 +13,12 @@ import axios from 'axios'
 import productCard from '~/components/productCard.vue'
 
 export default {
-  asyncData({ store }) {
-    if (store.state.product.productsByPage.length < 1) {
-      return store.dispatch('getProductsByPage').then(() => {
-        return { products: store.state.product.productsByPage }
-      })
-    } else {
+  asyncData({ store, query }) {
+    store.commit('loadingStatus', true)
+    return store.dispatch('getProductsByPage', query.page).then(() => {
+      store.commit('loadingStatus', false)
       return { products: store.state.product.productsByPage }
-    }
+    })
   },
   components: {
     productCard
@@ -30,7 +32,8 @@ export default {
     return {
       title: '所有甜點'
     }
-  }
+  },
+  watchQuery: ['page']
 }
 </script>
 

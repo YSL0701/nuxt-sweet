@@ -4,7 +4,8 @@ export default {
   state: {
     recipientInfo: {},
     paymentInfo: {},
-    receiptInfo: {}
+    receiptInfo: {},
+    orderInfo: []
   },
   mutations: {
     addRecipientInfo(state, payload) {
@@ -26,6 +27,12 @@ export default {
       state.recipientInfo = {}
       state.paymentInfo = {}
       state.receiptInfo = {}
+    },
+    setOrderInfo(state, payload) {
+      state.orderInfo = payload
+    },
+    removeCompleteOrderInfo(state) {
+      state.orderInfo = []
     }
   },
   actions: {
@@ -58,6 +65,18 @@ export default {
         .update({
           order: firebase.firestore.FieldValue.arrayUnion(finalOrderData)
         })
+    },
+    getOrder({ commit }, uid) {
+      return new Promise((resolve, reject) => {
+        db.collection('users')
+          .doc(uid)
+          .get()
+          .then(user => {
+            var Order = user.data().order
+            commit('setOrderInfo', Order)
+            resolve()
+          })
+      })
     }
   }
 }

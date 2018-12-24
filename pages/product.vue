@@ -2,14 +2,17 @@
   <div class="main">
     <div class="main-image-area">
       <div>
-        <img src="~/static/image/lg-想吃甜點是不需要理由的.svg" alt="">
+        <img
+          src="~/static/image/lg-想吃甜點是不需要理由的.svg"
+          alt=""
+        >
       </div>
     </div>
     <div class="product-list">
       <categoryList />
       <nuxt-child />
     </div>
-    <pagination />
+    <pagination v-if="!$route.params.category" />
   </div>
 </template>
 

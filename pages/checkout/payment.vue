@@ -185,7 +185,8 @@ export default {
       return this.expirationDate.month > 0 && this.expirationDate.month < 13 && this.expirationDate.year.length === 2
     },
     securityCodeValidate() {
-      return this.securityCode.length === 3
+      var securityCodeRule = /^\d{3}$/
+      return securityCodeRule.test(this.securityCode)
     },
     user() {
       return this.$store.state.auth.user
@@ -205,6 +206,9 @@ export default {
       this.$store.dispatch('getUnfinishedOrder', uid).then(() => {
         if (this.$store.state.order.paymentInfo.cardNumber) {
           this.getStateData()
+        }
+        if (!this.$store.state.order.recipientInfo.lastName) {
+          this.$router.push('/checkout/recipientInfo')
         }
       })
     }
