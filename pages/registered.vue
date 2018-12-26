@@ -3,87 +3,250 @@
     <div class="registered-area">
       <div class="title">註冊帳號</div>
       <div class="mobile-other-account">
-        <div @click="fbLogin"><img src="~/static/image/ic-facebook-logotype.svg" alt="" class="facebook"></div>
-        <div @click="googleLogin" class="google-area"><img src="~/static/image/ic-google.svg" alt="" class="google"></div>
-        <div @click="twitterLogin" class="twitter">Twitter</div>
+        <div @click="fbLogin"><img
+            src="~/static/image/ic-facebook-logotype.svg"
+            alt=""
+            class="facebook"
+          ></div>
+        <div
+          @click="googleLogin"
+          class="google-area"
+        ><img
+            src="~/static/image/ic-google.svg"
+            alt=""
+            class="google"
+          ></div>
+        <div
+          @click="twitterLogin"
+          class="twitter"
+        >Twitter</div>
       </div>
       <div class="registered-info">
         <div class="account">
           <div class="account-icon"><i class="material-icons">assignment_ind</i></div>
-          <input type="email" placeholder="電子信箱" v-model="email">
+          <input
+            type="email"
+            placeholder="電子信箱"
+            v-model="email"
+            @blur="focused.email = true"
+          >
         </div>
+        <validateText
+          class="validate"
+          text="請輸入正確格式的emial"
+          v-show="!emailValidate && focused.email"
+        />
         <div class="password">
           <div class="password-icon"><i class="material-icons">vpn_key</i></div>
-          <input type="password" placeholder="密碼(6~12位英文數字組合)" v-model="password">
+          <input
+            type="password"
+            placeholder="密碼(6~12位英文數字組合)"
+            v-model="password"
+            @blur="focused.password = true"
+            maxlength="12"
+          >
         </div>
+        <validateText
+          class="validate"
+          text="請輸入正確格式的密碼"
+          v-show="!passwordValidate && focused.password"
+        />
         <div class="password">
           <div class="password-icon"><i class="material-icons">vpn_key</i></div>
-          <input type="password" placeholder="確認密碼" v-model="passwordCheck">
+          <input
+            type="password"
+            placeholder="確認密碼"
+            v-model="passwordCheck"
+            @blur="focused.passwordCheck = true"
+            maxlength="12"
+          >
         </div>
-        <label for="remember" class="remember">
-          <input type="checkbox" id="remember" class="checkbox">
+        <validateText
+          class="validate"
+          text="確認密碼錯誤"
+          v-show="!confermPassword && focused.passwordCheck && passwordValidate"
+        />
+        <label
+          for="subscribe"
+          class="subscribe"
+        >
+          <input
+            type="checkbox"
+            id="subscribe"
+            class="checkbox"
+            v-model="subscribe"
+          >
           <span class="ischeck"><i class="material-icons">check_box</i></span>
           <span class="uncheck"><i class="material-icons">check_box_outline_blank</i></span>
           訂閱最新消息
         </label>
-        <nuxt-link to="/login" class="registered">
+        <nuxt-link
+          to="/login"
+          class="login"
+        >
           <div class="triangle"></div>
           <span>登入</span>
         </nuxt-link>
       </div>
-      <div class="registered" @click="emailRegistered">註冊帳號</div>
+      <div
+        class="registered"
+        @click="emailRegistered"
+      >註冊帳號</div>
     </div>
     <div class="other-account">
       <div class="title">—— 連結社群帳號 ——</div>
       <div class="other-account-icon">
-        <div class="facebook" @click="fbLogin"><img src="~/static/image/ic-facebook-logotype.svg" alt=""></div>
-        <div class="google" @click="googleLogin"><img src="~/static/image/ic-google.svg" alt=""></div>
-        <div class="twitter" @click="twitterLogin">Twitter</div>
+        <div
+          class="facebook"
+          @click="fbLogin"
+        ><img
+            src="~/static/image/ic-facebook-logotype.svg"
+            alt=""
+          ></div>
+        <div
+          class="google"
+          @click="googleLogin"
+        ><img
+            src="~/static/image/ic-google.svg"
+            alt=""
+          ></div>
+        <div
+          class="twitter"
+          @click="twitterLogin"
+        >Twitter</div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import validateText from '~/components/validateText.vue'
 export default {
   data() {
     return {
       email: '',
       password: '',
-      passwordCheck: ''
+      passwordCheck: '',
+      focused: {
+        email: false,
+        password: false,
+        passwordCheck: false
+      },
+      subscribe: false
     }
   },
   methods: {
     emailRegistered() {
       if (this.emailValidate && this.passwordValidate && this.confermPassword) {
-        this.$store.dispatch('emailRegistered', { email: this.email, password: this.password }).then(user => {
-          this.$store.dispatch('setUserToDb', user).then(() => {
-            this.setLoginCookie(user.uid)
+        this.$store.commit('loadingStatus', true)
+        this.$store
+          .dispatch('emailRegistered', { email: this.email, password: this.password })
+          .then(user => {
+            return this.$store.dispatch('setUserToDb', user)
           })
-        })
+          .then(user => {
+            this.setLoginCookie(user.uid)
+            this.$store.commit('loadingStatus', false)
+            this.loginMessage(false, true)
+          })
+          .catch(err => {
+            this.$store.commit('loadingStatus', false)
+            this.loginMessage(false, false, err)
+          })
+      } else {
+        this.focused.email = true
+        this.focused.password = true
+        this.focused.passwordCheck = true
       }
     },
     googleLogin() {
-      this.$store.dispatch('googleLogin').then(user => {
-        this.setLoginCookie(user.uid)
-      })
+      this.$store.commit('loadingStatus', true)
+      this.$store
+        .dispatch('googleLogin')
+        .then(user => {
+          return this.$store.dispatch('setUserToDb', user)
+        })
+        .then(user => {
+          this.setLoginCookie(user.uid)
+          this.$store.commit('loadingStatus', false)
+          this.loginMessage(true, true)
+        })
+        .catch(err => {
+          this.$store.commit('loadingStatus', false)
+          this.loginMessage(true, false)
+        })
     },
     fbLogin() {
-      this.$store.dispatch('fbLogin').then(user => {
-        this.setLoginCookie(user.uid)
-      })
+      this.$store.commit('loadingStatus', true)
+      this.$store
+        .dispatch('fbLogin')
+        .then(user => {
+          return this.$store.dispatch('setUserToDb', user)
+        })
+        .then(user => {
+          this.setLoginCookie(user.uid)
+          this.$store.commit('loadingStatus', false)
+          this.loginMessage(true, true)
+        })
+        .catch(err => {
+          this.$store.commit('loadingStatus', false)
+          this.loginMessage(true, false)
+        })
     },
     twitterLogin() {
-      this.$store.dispatch('twitterLogin').then(user => {
-        this.setLoginCookie(user.uid)
-      })
+      this.$store.commit('loadingStatus', true)
+      this.$store
+        .dispatch('twitterLogin')
+        .then(user => {
+          return this.$store.dispatch('setUserToDb', user)
+        })
+        .then(user => {
+          this.setLoginCookie(user.uid)
+          this.$store.commit('loadingStatus', false)
+          this.loginMessage(true, true)
+        })
+        .catch(err => {
+          this.$store.commit('loadingStatus', false)
+          this.loginMessage(true, false)
+        })
     },
     setLoginCookie(uid) {
       this.$cookies.set('uid', uid, {
         path: '/',
-        // maxAge: 60 * 60 * 24 * 7
-        maxAge: 60 * 60
+        maxAge: 60 * 60 * 24
       })
+    },
+    loginMessage(isOtherAccount, success, falseMessage = '註冊失敗，請檢查輸入的資訊') {
+      this.$store.commit('removeAllMessage')
+      if (isOtherAccount) {
+        if (success) {
+          this.$store.commit('addMessage', {
+            content: `登入成功！`,
+            id: 'loginSuccess',
+            type: 'normal'
+          })
+        } else {
+          this.$store.commit('addMessage', {
+            content: `登入失敗，請檢查登入資訊`,
+            id: 'loginFalse',
+            type: 'error'
+          })
+        }
+      } else {
+        if (success) {
+          this.$store.commit('addMessage', {
+            content: `註冊成功！`,
+            id: 'registeredSuccess',
+            type: 'normal'
+          })
+        } else {
+          this.$store.commit('addMessage', {
+            content: falseMessage,
+            id: 'registeredFalse',
+            type: 'error'
+          })
+        }
+      }
     }
   },
   computed: {
@@ -110,6 +273,9 @@ export default {
         return false
       }
     }
+  },
+  components: {
+    validateText
   },
   watch: {
     '$store.state.auth.user'() {
@@ -145,11 +311,11 @@ export default {
   > .registered-area {
     background-color: $primary;
     width: 390px;
-    height: 478px;
+    // height: 478px;
     @include flex(column, flex-start, center);
     @include media($mobile) {
       width: 100%;
-      height: 609px;
+      // height: 609px;
     }
     > .title {
       height: 50px;
@@ -253,7 +419,7 @@ export default {
           padding-right: 0;
         }
       }
-      > .remember {
+      > .subscribe {
         color: #ffffff;
         font-size: 16px;
         font-weight: bold;
@@ -281,7 +447,7 @@ export default {
           display: none;
         }
       }
-      > .registered {
+      > .login {
         color: #ffffff;
         font-size: 16px;
         font-weight: bold;
@@ -304,11 +470,16 @@ export default {
           border-right: none;
         }
       }
+      > .validate {
+        margin-top: 10px;
+        margin-bottom: -6px;
+        align-self: flex-start;
+      }
     }
     > .registered {
       width: 390px;
       height: 65px;
-      margin-top: auto;
+      margin-top: 17px;
       cursor: pointer;
       background-color: #ffe180;
       color: $primary;
@@ -318,6 +489,7 @@ export default {
       @include flex(row, center, center);
       @include media($mobile) {
         width: 100%;
+        margin-top: 22px;
       }
       @include media($desktop) {
         &:hover {

@@ -42,6 +42,12 @@
             class="nuxtLink"
           >查詢訂單</nuxt-link>
         </li>
+        <li v-if="!isLogin">
+          <nuxt-link
+            to="/registered"
+            class="nuxtLink"
+          >註冊</nuxt-link>
+        </li>
         <li>
           <nuxt-link
             to="/login"
@@ -88,7 +94,8 @@ export default {
         this.$store.commit('removeAllMessage')
         this.$store.commit('addMessage', {
           content: '已登出',
-          id: 'logout'
+          id: 'logout',
+          type: 'normal'
         })
       })
     },
@@ -252,12 +259,13 @@ header {
     }
   }
   > .dropDownMenu {
-    position: relative;
+    position: absolute;
     display: none;
     z-index: 8;
     @include media($mobile) {
       display: block;
       top: -200px;
+      width: 100%;
       transition-property: top;
       transition-duration: 0.8s;
       background-color: rgba(255, 255, 255, 0.8);
@@ -265,7 +273,7 @@ header {
   }
   > .dropDownMenuOpen {
     @include media($mobile) {
-      top: 0;
+      top: 84px;
     }
   }
 }

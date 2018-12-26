@@ -6,6 +6,7 @@
       :message="item.content"
       :index="index"
       :key="item.id"
+      :type="item.type"
     />
   </div>
 </template>

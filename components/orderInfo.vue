@@ -350,6 +350,7 @@ export default {
         font-size: 18px;
         @include flex();
         @include media($mobile) {
+          margin-top: 15px;
           @include flex(column);
         }
         > .title {

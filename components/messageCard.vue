@@ -1,10 +1,16 @@
 <template>
-  <div class="msgCard" :class="{enter:isEnter}">{{ message }}<i class="fas fa-times" @click="userRemoveMessage"></i></div>
+  <div
+    class="msgCard"
+    :class="{enter:isEnter,error:type==='error',warn:type==='warn'}"
+  >{{ message }}<i
+      class="fas fa-times"
+      @click="userRemoveMessage"
+    ></i></div>
 </template>
 
 <script>
 export default {
-  props: ['message', 'index'],
+  props: ['message', 'index', 'type'],
   data() {
     return {
       intervalId: '',
@@ -50,6 +56,14 @@ export default {
     cursor: pointer;
     margin-left: 5px;
   }
+}
+.error {
+  background-color: rgb(253, 86, 86);
+  color: rgb(255, 255, 255);
+}
+.warn {
+  background-color: rgb(255, 197, 72);
+  color: rgb(0, 0, 0);
 }
 .enter {
   opacity: 0.9;

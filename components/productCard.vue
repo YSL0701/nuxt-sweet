@@ -72,13 +72,15 @@ export default {
     addMessage() {
       this.$store.commit('addMessage', {
         content: `${this.product.title} 已加入購物車`,
-        id: this.product.id
+        id: this.product.id,
+        type: 'normal'
       })
     },
     hadProductMessage() {
       this.$store.commit('addMessage', {
         content: `${this.product.title} 已在購物車內`,
-        id: this.product.id
+        id: this.product.id,
+        type: 'warn'
       })
     }
   },

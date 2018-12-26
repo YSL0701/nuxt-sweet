@@ -52,7 +52,7 @@
         </div>
         <validateText
           class="validate"
-          text="請輸入正確的emial"
+          text="請輸入正確格式的emial"
           v-show="!emailValidate && focused.email && receiptType === 'email'"
         />
         <div
@@ -228,7 +228,8 @@ export default {
     addMessage() {
       this.$store.commit('addMessage', {
         content: `結帳成功！`,
-        id: Date.now()
+        id: Date.now(),
+        type: 'normal'
       })
     }
   },

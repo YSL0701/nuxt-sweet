@@ -28,16 +28,29 @@
             type="email"
             placeholder="電子信箱"
             v-model="email"
+            @blur="focused.email = true"
           >
         </div>
+        <validateText
+          class="validate"
+          text="請輸入正確格式的emial"
+          v-show="!emailValidate && focused.email"
+        />
         <div class="password">
           <div class="password-icon"><i class="material-icons">vpn_key</i></div>
           <input
             type="password"
             placeholder="請輸入使用者密碼"
             v-model="password"
+            @blur="focused.password = true"
+            maxlength="12"
           >
         </div>
+        <validateText
+          class="validate"
+          text="請輸入正確格式的密碼"
+          v-show="!passwordValidate && focused.password"
+        />
         <label
           for="remember"
           class="remember"
@@ -91,38 +104,49 @@
 </template>
 
 <script>
+import validateText from '~/components/validateText.vue'
 export default {
   data() {
     return {
       email: '',
-      password: ''
+      password: '',
+      focused: {
+        email: false,
+        password: false
+      }
     }
   },
   methods: {
     emailLogin() {
-      this.$store.commit('loadingStatus', true)
-      this.$store
-        .dispatch('emailLogin', { email: this.email, password: this.password })
-        .then(user => {
-          this.setLoginCookie(user.uid)
-          this.$store.commit('loadingStatus', false)
-          this.loginMessage(true)
-        })
-        .catch(err => {
-          this.$store.commit('loadingStatus', false)
-          this.loginMessage(false)
-        })
+      if (this.emailValidate && this.passwordValidate) {
+        this.$store.commit('loadingStatus', true)
+        this.$store
+          .dispatch('emailLogin', { email: this.email, password: this.password })
+          .then(user => {
+            this.setLoginCookie(user.uid)
+            this.$store.commit('loadingStatus', false)
+            this.loginMessage(true)
+          })
+          .catch(err => {
+            this.$store.commit('loadingStatus', false)
+            this.loginMessage(false, err)
+          })
+      } else {
+        this.focused.email = true
+        this.focused.password = true
+      }
     },
     googleLogin() {
       this.$store.commit('loadingStatus', true)
       this.$store
         .dispatch('googleLogin')
         .then(user => {
-          this.$store.dispatch('setUserToDb', user).then(() => {
-            this.setLoginCookie(user.uid)
-            this.$store.commit('loadingStatus', false)
-            this.loginMessage(true)
-          })
+          return this.$store.dispatch('setUserToDb', user)
+        })
+        .then(user => {
+          this.setLoginCookie(user.uid)
+          this.$store.commit('loadingStatus', false)
+          this.loginMessage(true)
         })
         .catch(err => {
           this.$store.commit('loadingStatus', false)
@@ -134,11 +158,12 @@ export default {
       this.$store
         .dispatch('fbLogin')
         .then(user => {
-          this.$store.dispatch('setUserToDb', user).then(() => {
-            this.setLoginCookie(user.uid)
-            this.$store.commit('loadingStatus', false)
-            this.loginMessage(true)
-          })
+          return this.$store.dispatch('setUserToDb', user)
+        })
+        .then(user => {
+          this.setLoginCookie(user.uid)
+          this.$store.commit('loadingStatus', false)
+          this.loginMessage(true)
         })
         .catch(err => {
           this.$store.commit('loadingStatus', false)
@@ -150,11 +175,12 @@ export default {
       this.$store
         .dispatch('twitterLogin')
         .then(user => {
-          this.$store.dispatch('setUserToDb', user).then(() => {
-            this.setLoginCookie(user.uid)
-            this.$store.commit('loadingStatus', false)
-            this.loginMessage(true)
-          })
+          return this.$store.dispatch('setUserToDb', user)
+        })
+        .then(user => {
+          this.setLoginCookie(user.uid)
+          this.$store.commit('loadingStatus', false)
+          this.loginMessage(true)
         })
         .catch(err => {
           this.$store.commit('loadingStatus', false)
@@ -168,26 +194,44 @@ export default {
         maxAge: 60 * 60 * 24
       })
     },
-    loginMessage(success) {
+    loginMessage(success, falseMessage = '登入失敗，請檢查登入資訊') {
+      this.$store.commit('removeAllMessage')
       if (success) {
         this.$store.commit('addMessage', {
           content: `登入成功，歡迎回來！`,
-          id: 'loginSuccess'
+          id: 'loginSuccess',
+          type: 'normal'
         })
       } else {
         this.$store.commit('addMessage', {
-          content: `登入失敗，請檢查登入資訊`,
-          id: 'loginFalse'
+          content: falseMessage,
+          id: 'loginFalse',
+          type: 'error'
         })
       }
     }
   },
-  computed: {},
-  // beforeMount() {
-  //   if (this.$store.state.auth.user) {
-  //     this.$router.push('/')
-  //   }
-  // },
+  computed: {
+    emailValidate() {
+      var emailRule = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z]+$/
+      if (emailRule.test(this.email) && this.email) {
+        return true
+      } else {
+        return false
+      }
+    },
+    passwordValidate() {
+      var passwordRule = /^([0-9]+[a-zA-Z]+|[a-zA-Z]+[0-9]+)[0-9a-zA-Z]*$/
+      if (passwordRule.test(this.password) && this.password.length > 5 && this.password.length < 13) {
+        return true
+      } else {
+        return false
+      }
+    }
+  },
+  components: {
+    validateText
+  },
   watch: {
     '$store.state.auth.user'() {
       if (this.$store.state.auth.user) {
@@ -222,11 +266,11 @@ export default {
   > .login-area {
     background-color: $primary;
     width: 390px;
-    height: 406px;
+    // height: 406px;
     @include flex(column, flex-start, center);
     @include media($mobile) {
       width: 100%;
-      height: 537px;
+      // height: 537px;
     }
     > .title {
       height: 50px;
@@ -381,11 +425,16 @@ export default {
           border-right: none;
         }
       }
+      > .validate {
+        margin-top: 10px;
+        margin-bottom: -6px;
+        align-self: flex-start;
+      }
     }
     > .login {
       width: 390px;
       height: 65px;
-      margin-top: auto;
+      margin-top: 17px;
       cursor: pointer;
       background-color: #ffe180;
       color: $primary;
@@ -395,6 +444,7 @@ export default {
       @include flex(row, center, center);
       @include media($mobile) {
         width: 100%;
+        margin-top: 22px;
       }
       @include media($desktop) {
         &:hover {

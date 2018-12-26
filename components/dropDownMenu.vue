@@ -11,7 +11,13 @@
     <div
       @click="goTo('/checkOrder')"
       class="checkOrder"
+      v-if="isLogin"
     >查詢訂單</div>
+    <div
+      @click="goTo('/registered')"
+      class="registered"
+      v-if="!isLogin"
+    >註冊</div>
     <div
       @click="goTo('/login')"
       class="login"
@@ -43,7 +49,8 @@ export default {
         this.closeMenu()
         this.$store.commit('addMessage', {
           content: '已登出',
-          id: 'logout'
+          id: 'logout',
+          type: 'normal'
         })
       })
     },

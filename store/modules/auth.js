@@ -21,11 +21,23 @@ export default {
   actions: {
     emailRegistered({ commit }, payload) {
       return new Promise((resolve, reject) => {
-        auth.createUserWithEmailAndPassword(payload.email, payload.password).then(user => {
-          commit('setUser', user.user)
-          commit('loginStatus', true)
-          resolve(user.user)
-        })
+        auth
+          .createUserWithEmailAndPassword(payload.email, payload.password)
+          .then(user => {
+            commit('setUser', user.user)
+            commit('loginStatus', true)
+            resolve(user.user)
+          })
+          .catch(err => {
+            console.log('err', err)
+            if (err.code === 'auth/email-already-in-use') {
+              return reject('email已被使用過！')
+            } else if (err.code === 'auth/invalid-email') {
+              return reject('email格式錯誤！')
+            } else {
+              return reject()
+            }
+          })
       })
     },
     emailLogin({ commit }, payload) {
@@ -35,10 +47,20 @@ export default {
           .then(user => {
             commit('setUser', user)
             commit('loginStatus', true)
+            console.log(user)
             resolve(user.user)
           })
           .catch(err => {
-            reject()
+            console.log('err', err)
+            if (err.code === 'auth/wrong-password') {
+              return reject('密碼錯誤！')
+            } else if (err.code === 'auth/user-not-found') {
+              return reject('帳號不存在！')
+            } else if (err.code === 'auth/invalid-email') {
+              return reject('email格式錯誤！')
+            } else {
+              return reject()
+            }
           })
       })
     },
@@ -145,7 +167,7 @@ export default {
                   order_unfinished: {}
                 })
             }
-            resolve()
+            resolve(payload)
           })
       })
     }
