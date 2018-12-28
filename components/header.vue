@@ -6,9 +6,18 @@
         @click="dropDown = !dropDown"
       >
         <div class="line-box">
-          <div class="menu-line"></div>
-          <div class="menu-line"></div>
-          <div class="menu-line"></div>
+          <div
+            class="menu-line"
+            :class="{'line1-active':dropDown}"
+          ></div>
+          <div
+            class="menu-line"
+            :class="{'line2-active':dropDown}"
+          ></div>
+          <div
+            class="menu-line"
+            :class="{'line3-active':dropDown}"
+          ></div>
         </div>
       </div>
       <img
@@ -191,6 +200,25 @@ header {
           width: 100%;
           height: 2px;
           background-color: $primary;
+          transition-property: transform, opacity, top, width;
+          transition-duration: 0.6s;
+          position: relative;
+          top: 0;
+        }
+        > .line1-active {
+          transform: rotate(225deg);
+          // transform: rotate(45deg);
+          top: 5px;
+          width: 20px;
+        }
+        > .line2-active {
+          transform: rotate(-45deg);
+          // transform: rotate(-225deg);
+          width: 20px;
+        }
+        > .line3-active {
+          opacity: 0;
+          width: 20px;
         }
       }
     }
@@ -267,7 +295,7 @@ header {
       top: -200px;
       width: 100%;
       transition-property: top;
-      transition-duration: 0.8s;
+      transition-duration: 0.6s;
       background-color: rgba(255, 255, 255, 0.8);
     }
   }

@@ -72,6 +72,7 @@ export default {
               resolve({ mixCart, uid })
             } else {
               commit('setMutipleProductToCart', dbCart)
+              resolve({ mixCart: dbCart, uid })
             }
           })
       })

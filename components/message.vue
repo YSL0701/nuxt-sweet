@@ -32,6 +32,9 @@ export default {
   right: 30px;
   z-index: 5;
   @include flex(column, flex-start, flex-end);
+  @include media($desktop-big) {
+    right: calc((100% - 940px) / 2 - 250px);
+  }
   @include media($mobile) {
     top: 84px;
     right: 10px;

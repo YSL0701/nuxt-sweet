@@ -219,7 +219,7 @@ export default {
       return this.$store
         .dispatch('createOrder', finalOrderData)
         .then(() => {
-          return this.$store.dispatch('updateCartToDb', { uid: this.user.uid, newCart: {} })
+          return this.$store.dispatch('updateCartToDb', { uid: this.user.uid, newCart: [] })
         })
         .then(() => {
           return this.$store.dispatch('updateUnfinishedOrderToDb', { uid: this.user.uid, orderData: {} })

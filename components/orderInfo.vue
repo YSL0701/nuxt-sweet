@@ -277,7 +277,7 @@ export default {
         word-break: break-all;
       }
       > div {
-        max-width: 120px;
+        max-width: 130px;
         width: 100%;
         margin-left: auto;
         margin-right: auto;

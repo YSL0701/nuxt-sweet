@@ -23,7 +23,7 @@ export default {
       title: '結帳'
     }
   },
-  middleware: 'loginCheck'
+  middleware: ['loginCheck', 'cartCheck']
 }
 </script>
 

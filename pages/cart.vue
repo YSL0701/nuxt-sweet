@@ -11,7 +11,10 @@
         />
       </div>
     </div>
-    <div class="order">
+    <div
+      class="order"
+      v-if="cartContent.length"
+    >
       <div class="title">訂單摘要</div>
       <div class="content">
         <div class="subtotal">
