@@ -73,7 +73,12 @@
           <nuxt-link
             to="/cart"
             class="nuxtLink"
-          ><i class="material-icons">shopping_cart</i></nuxt-link>
+          ><i class="material-icons">shopping_cart</i>
+            <div
+              class="cartQtyCount"
+              v-if="cartProductQty>0"
+            >{{ cartProductQty }}</div>
+          </nuxt-link>
         </li>
       </ul>
     </div>
@@ -111,7 +116,7 @@ export default {
     checkLoginStatus() {
       return new Promise((resolve, reject) => {
         if (this.$cookies.get('uid')) {
-          this.$store.commit('loginStatus', true)
+          this.$store.commit('loadingStatus', true)
           this.$store.dispatch('checkUser', this.$cookies.get('uid')).then(uid => {
             resolve(uid)
           })
@@ -123,7 +128,9 @@ export default {
     },
     cartInit(uid) {
       if (this.isLogin) {
-        this.$store.dispatch('getDbCartData', uid)
+        this.$store.dispatch('getDbCartData', uid).then(() => {
+          this.$store.commit('loadingStatus', false)
+        })
       } else {
         this.$store.commit('localDataToCart')
       }
@@ -138,6 +145,11 @@ export default {
     },
     isLogin() {
       return this.$store.state.auth.isLogin
+    },
+    cartProductQty() {
+      return this.$store.state.cart.cart.reduce((prev, next) => {
+        return prev + next.qty
+      }, 0)
     }
   },
   created() {
@@ -278,9 +290,26 @@ header {
         }
         > .nuxtLink {
           width: 73px;
+          position: relative;
           @include media($mobile) {
             width: 84px;
             height: 84px;
+          }
+          > .cartQtyCount {
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            top: 20px;
+            left: 40px;
+            color: $primary;
+            background-color: #ffe180;
+            font-size: 16px;
+            border-radius: 50%;
+            @include flex(row, center, center);
+            @include media($mobile) {
+              top: 10px;
+              left: 45px;
+            }
           }
         }
       }

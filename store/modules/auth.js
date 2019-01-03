@@ -145,6 +145,7 @@ export default {
       return new Promise((resolve, reject) => {
         auth.onAuthStateChanged(user => {
           commit('setUser', user)
+          commit('loginStatus', true)
           if (user.uid === uid) {
             resolve(user.uid)
           }

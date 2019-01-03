@@ -92,12 +92,11 @@ export default {
   > .product-info {
     margin-left: 40px;
     height: 53px;
-    @include media($desktop) {
-      width: 100px;
-    }
+    width: 100px;
     @include flex(column, space-around);
     @include media($mobile) {
       margin-left: 16px;
+      width: auto;
       height: 50px;
     }
     > .name {
@@ -142,6 +141,7 @@ export default {
     margin-left: 40px;
     font-weight: bold;
     font-size: 20px;
+    width: 81px;
     @include media($mobile) {
       width: 100%;
       height: 49px;

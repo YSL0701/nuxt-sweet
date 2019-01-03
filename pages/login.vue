@@ -3,13 +3,13 @@
     <div class="login-area">
       <div class="title">會員登入</div>
       <div class="mobile-other-account">
-        <div @click="fbLogin"><img
+        <div @click="otherAccountLogin('fb')"><img
             src="~/static/image/ic-facebook-logotype.svg"
             alt=""
             class="facebook"
           ></div>
         <div
-          @click="googleLogin"
+          @click="otherAccountLogin('google')"
           class="google-area"
         ><img
             src="~/static/image/ic-google.svg"
@@ -17,7 +17,7 @@
             class="google"
           ></div>
         <div
-          @click="twitterLogin"
+          @click="otherAccountLogin('twitter')"
           class="twitter"
         >Twitter</div>
       </div>
@@ -82,21 +82,21 @@
       <div class="other-account-icon">
         <div
           class="facebook"
-          @click="fbLogin"
+          @click="otherAccountLogin('fb')"
         ><img
             src="~/static/image/ic-facebook-logotype.svg"
             alt=""
           ></div>
         <div
           class="google"
-          @click="googleLogin"
+          @click="otherAccountLogin('google')"
         ><img
             src="~/static/image/ic-google.svg"
             alt=""
           ></div>
         <div
           class="twitter"
-          @click="twitterLogin"
+          @click="otherAccountLogin('twitter')"
         >Twitter</div>
       </div>
     </div>
@@ -136,44 +136,10 @@ export default {
         this.focused.password = true
       }
     },
-    googleLogin() {
+    otherAccountLogin(via) {
       this.$store.commit('loadingStatus', true)
       this.$store
-        .dispatch('googleLogin')
-        .then(user => {
-          return this.$store.dispatch('setUserToDb', user)
-        })
-        .then(user => {
-          this.setLoginCookie(user.uid)
-          this.$store.commit('loadingStatus', false)
-          this.loginMessage(true)
-        })
-        .catch(err => {
-          this.$store.commit('loadingStatus', false)
-          this.loginMessage(false)
-        })
-    },
-    fbLogin() {
-      this.$store.commit('loadingStatus', true)
-      this.$store
-        .dispatch('fbLogin')
-        .then(user => {
-          return this.$store.dispatch('setUserToDb', user)
-        })
-        .then(user => {
-          this.setLoginCookie(user.uid)
-          this.$store.commit('loadingStatus', false)
-          this.loginMessage(true)
-        })
-        .catch(err => {
-          this.$store.commit('loadingStatus', false)
-          this.loginMessage(false)
-        })
-    },
-    twitterLogin() {
-      this.$store.commit('loadingStatus', true)
-      this.$store
-        .dispatch('twitterLogin')
+        .dispatch(`${via}Login`)
         .then(user => {
           return this.$store.dispatch('setUserToDb', user)
         })
@@ -235,7 +201,6 @@ export default {
   watch: {
     '$store.state.auth.user'() {
       if (this.$store.state.auth.user) {
-        console.log('router push')
         this.$router.push('/')
       }
     }

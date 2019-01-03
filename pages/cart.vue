@@ -9,6 +9,10 @@
           :index="index"
           :key="item.id"
         />
+        <div
+          class="cart-empty"
+          v-if="cartContent.length<1 && !$store.state.loading.isLoading"
+        >目前購物車內沒有商品</div>
       </div>
     </div>
     <div
@@ -110,8 +114,13 @@ export default {
       font-weight: bold;
       @include flex(row, center, center);
     }
-    // > .content {
-    // }
+    > .content {
+      > .cart-empty {
+        font-size: 24px;
+        text-align: center;
+        margin-top: 30px;
+      }
+    }
   }
   > .order {
     width: 300px;
