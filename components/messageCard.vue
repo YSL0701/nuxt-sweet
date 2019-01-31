@@ -1,11 +1,14 @@
 <template>
-  <div
-    class="msgCard"
-    :class="{enter:isEnter,error:type==='error',warn:type==='warn'}"
-  >{{ message }}<i
-      class="fas fa-times"
-      @click="userRemoveMessage"
-    ></i></div>
+  <transition name="card">
+    <div
+      class="msgCard"
+      :class="{enter:isEnter,error:type==='error',warn:type==='warn'}"
+    >{{ message }}<i
+        class="fas fa-times"
+        @click="userRemoveMessage"
+      ></i>
+    </div>
+  </transition>
 </template>
 
 <script>
@@ -67,5 +70,9 @@ export default {
 }
 .enter {
   opacity: 0.9;
+}
+.card-enter,
+.card-leave-to {
+  opacity: 0;
 }
 </style>
