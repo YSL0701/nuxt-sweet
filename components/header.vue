@@ -49,25 +49,25 @@
           <nuxt-link
             to="/checkOrder"
             class="nuxtLink"
-          >查詢訂單</nuxt-link>
+          >{{ checkOrderText }}</nuxt-link>
         </li>
         <li v-if="!isLogin">
           <nuxt-link
             to="/registered"
             class="nuxtLink"
-          >註冊</nuxt-link>
+          >{{ registeredText }}</nuxt-link>
         </li>
         <li>
           <nuxt-link
             to="/login"
             class="nuxtLink"
             v-if="!isLogin"
-          >登入</nuxt-link>
+          >{{ loginText }}</nuxt-link>
           <div
             class="nuxtLink logout"
             v-else
             @click="logout"
-          >登出</div>
+          >{{ logoutText }}</div>
         </li>
         <li class="cart">
           <nuxt-link
@@ -150,9 +150,36 @@ export default {
       return this.$store.state.cart.cart.reduce((prev, next) => {
         return prev + next.qty
       }, 0)
+    },
+    isLoading() {
+      return this.$store.state.loading.isLoading
+    },
+    loginText() {
+      if (!this.isLoading) {
+        return '登入'
+      }
+      return ''
+    },
+    logoutText() {
+      if (!this.isLoading) {
+        return '登出'
+      }
+      return ''
+    },
+    registeredText() {
+      if (!this.isLoading) {
+        return '註冊'
+      }
+      return ''
+    },
+    checkOrderText() {
+      if (!this.isLoading) {
+        return '查詢訂單'
+      }
+      return ''
     }
   },
-  created() {
+  mounted() {
     this.checkLoginStatus().then(uid => {
       this.cartInit(uid)
     })
